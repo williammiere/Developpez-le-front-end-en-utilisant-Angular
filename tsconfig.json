@@ -28,5 +28,11 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "dependencies": {
+  "@angular/common": "^18.0.0",
+  "@angular/core": "^18.0.0",
+  "@swimlane/ngx-charts": "^20.5.0",
+  "@angular/cdk": "^18.0.0"
+}
 }

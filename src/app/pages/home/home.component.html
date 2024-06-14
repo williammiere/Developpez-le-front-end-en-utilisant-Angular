@@ -1,7 +1,7 @@
 <!--<h2>Olympic games app</h2>
 <hr />
 <p>{{ (olympics$ | async)?.length }} data loaded</p>-->
-<div *ngIf="olympics$ | async as olympics; else loading">
+<!--<div *ngIf="olympics$ | async as olympics; else loading">
     <div *ngFor="let olympic of olympics">
       <h2>{{ olympic.country }}</h2>
       <ul>
@@ -16,3 +16,34 @@
   <ng-template #loading>
     <p>Chargement des données...</p>
   </ng-template>
+ <div>
+  <ngx-charts-bar-vertical 
+    [view]="[650,700]"
+    [results]="gdpData"
+    [xAxisLabel]="'Provinces'"
+    [legendTitle]="'GSP Units Chart'"
+    [yAxisLabel]="'GSP per Billion USD '"
+    [legend]="false"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxis]="true"
+    [yAxis]="true"
+    [gradient]="true">
+</ngx-charts-bar-vertical>
+ </div>
+ <div>
+  <ngx-charts-pie-chart [results]="gdpData"></ngx-charts-pie-chart>
+ </div>-->
+<div class="chart-container">
+ <div *ngIf="(olympicMedalCounts$ | async) as data">
+  <ngx-charts-pie-chart
+    [results]="data"
+    [view]="[700, 400]"
+    [legend]="false"
+    [explodeSlices]="false"
+    [labels]="true"
+    [doughnut]="false"
+    [gradient]="false">
+  </ngx-charts-pie-chart>
+</div>
+</div>
