@@ -94,7 +94,7 @@ h2{
   .joCount, .countriCount {
     text-align: center;
     width: 50%;
-    border: 2px solid #0097A7;
+    border: 1px solid #0097A7;
     border-radius: 5px;
   }
   
@@ -114,9 +114,10 @@ p{
     margin: auto;
     text-align: center;
     color: #BDBDBD;
+    padding-top: 10px;
 }
 h2{
-    font-size: normal;
+    font-weight: normal;
     color: #BDBDBD;
     text-align: center;
     background-color: #0097A7;
@@ -124,4 +125,5 @@ h2{
     width: 20%;
     height: 50px;
     margin: auto;
+    padding-top: 10px;
 }
