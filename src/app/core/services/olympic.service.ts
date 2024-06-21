@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Olympic} from '../models/Olympic';
 import { Participation } from '../models/Participation';
+import { Medal } from '../models/medal';
 
 @Injectable({
   providedIn: 'root',
@@ -31,15 +32,29 @@ export class OlympicService {
     return this.olympics$.asObservable();
   }
 
-  getOlympicMedalCounts(): Observable<any> {
+ /* getCountryDetails(id: number): Observable<Olympic | undefined> {
     return this.getOlympics().pipe(
-      map((olympics: Olympic[]) => {
-        if (!olympics) return [];
-        return olympics.map((olympic: Olympic) => ({
-          name: olympic.country,
-          value: olympic.participations.reduce((acc: number, participation: Participation) => acc + participation.medalsCount, 0),
-        }));
-      })
+      map((olympics) => olympics.find((olympic) => olympic.id === id))
     );
-  }
+  }*/
+
+    getCountryDetails(id: number): Observable<Olympic | undefined> {
+      return this.getOlympics().pipe(
+        map((olympics) => olympics?.find(olympic => olympic.id === id))
+      );
+    }
+  
+    getCountryIdByName(name: string): Observable<number | undefined> {
+      return this.getOlympics().pipe(
+        map((olympics: Olympic[]) => {
+          const country = olympics.find(olympic => olympic.country === name);
+          return country ? country.id : undefined;
+        })
+      );
+    }
+
+    getTotalParticipations(participations: Participation[]): number {
+      return participations.length;
+    }
+ 
 }

@@ -1,0 +1,64 @@
+p {
+    text-align: center;
+}
+
+.detail-container {
+    display: grid;
+    grid-template-rows: auto auto auto auto; /* Quatre rangées égales */
+    grid-template-columns: 1fr; /* Une colonne qui s'étend sur toute la largeur */
+    gap: 20px; /* Espacement entre les éléments */
+  }
+  
+  .header {
+    grid-row: 1; /* Première rangée */
+    grid-column: 1; /* Première colonne */
+    text-align: center; /* Centrer le titre */
+    margin-top: 30px;
+    margin-bottom:15px ;
+  }
+  
+  .info {
+    grid-row: 2; /* Deuxième rangée */
+    grid-column: 1; /* Première colonne */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Colonnes responsives */
+    gap: 10px; /* Espacement entre les éléments de la deuxième rangée */
+    
+  }
+
+  .info-item {
+    width: 50%;
+    border: 1px solid #0097A7;
+    border-radius: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  
+  .chart {
+    grid-row: 3; /* Troisième rangée */
+    grid-column: 1; /* Première colonne */
+    margin: auto;
+  }
+  
+  .back-link {
+    grid-row: 4; /* Quatrième rangée */
+    grid-column: 1; /* Première colonne */
+    text-align: center; /* Centrer le lien de retour */
+    margin-top: 20px; /* Espacement par rapport au contenu précédent */
+  }
+
+p{
+    margin: auto;
+    text-align: center;
+    color: #BDBDBD;
+}
+h2{
+    font-size: 30px;
+    color: #BDBDBD;
+    text-align: center;
+    background-color: #0097A7;
+    border-radius: 5px;
+    width: 20%;
+    height: 50px;
+    margin: auto;
+}

@@ -34,16 +34,33 @@
  <div>
   <ngx-charts-pie-chart [results]="gdpData"></ngx-charts-pie-chart>
  </div>-->
-<div class="chart-container">
- <div *ngIf="(olympicMedalCounts$ | async) as data">
-  <ngx-charts-pie-chart
-    [results]="data"
-    [view]="[700, 400]"
-    [legend]="false"
-    [explodeSlices]="false"
-    [labels]="true"
-    [doughnut]="false"
-    [gradient]="false">
-  </ngx-charts-pie-chart>
-</div>
+ <div class="chart-container">
+  <h2 class="title">Medals per Country</h2>
+  
+  <div class="info-container">
+    <div class="joCount">
+      <p>Number of JOs</p>
+      <p>{{countriesLength}}</p>
+    </div>
+    <div class="countriCount">
+      <p>Number of countries</p>
+      <p>{{countriesLength}}</p>
+    </div>
+  </div>
+  
+  <div class="chartPie">
+    <div *ngIf="medals.length != 0" id="pie">
+      <ngx-charts-pie-chart
+        class="chartPie"
+        [results]="medals"
+        [view]="[700, 400]"
+        [legend]="false"
+        [explodeSlices]="false"
+        [labels]="true"
+        [doughnut]="false"
+        [gradient]="false"
+        (select)="onCountrySelect($event)">
+      </ngx-charts-pie-chart>
+    </div>
+  </div>
 </div>
