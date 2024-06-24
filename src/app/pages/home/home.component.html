@@ -1,55 +1,17 @@
-<!--<h2>Olympic games app</h2>
-<hr />
-<p>{{ (olympics$ | async)?.length }} data loaded</p>-->
-<!--<div *ngIf="olympics$ | async as olympics; else loading">
-    <div *ngFor="let olympic of olympics">
-      <h2>{{ olympic.country }}</h2>
-      <ul>
-        <li *ngFor="let participation of olympic.participations">
-          <strong>{{ participation.year }} ({{ participation.city }})</strong> :
-          {{ participation.medalsCount }} médailles,
-          {{ participation.athleteCount }} athlètes
-        </li>
-      </ul>
-    </div>
-  </div>
-  <ng-template #loading>
-    <p>Chargement des données...</p>
-  </ng-template>
- <div>
-  <ngx-charts-bar-vertical 
-    [view]="[650,700]"
-    [results]="gdpData"
-    [xAxisLabel]="'Provinces'"
-    [legendTitle]="'GSP Units Chart'"
-    [yAxisLabel]="'GSP per Billion USD '"
-    [legend]="false"
-    [showXAxisLabel]="true"
-    [showYAxisLabel]="true"
-    [xAxis]="true"
-    [yAxis]="true"
-    [gradient]="true">
-</ngx-charts-bar-vertical>
- </div>
- <div>
-  <ngx-charts-pie-chart [results]="gdpData"></ngx-charts-pie-chart>
- </div>-->
  <div class="chart-container">
   <h2 class="title">Medals per Country</h2>
-  
   <div class="info-container">
     <div class="joCount">
       <p>Number of JOs</p>
-      <p>{{countriesLength}}</p>
+      <p>{{totalEntries}}</p>
     </div>
     <div class="countriCount">
       <p>Number of countries</p>
       <p>{{countriesLength}}</p>
     </div>
   </div>
-  
   <div class="chartPie">
-    <div *ngIf="medals.length != 0" id="pie">
+    <div *ngIf="medals.length != 0; else loading" id="pie">
       <ngx-charts-pie-chart
         class="chartPie"
         [results]="medals"
@@ -63,4 +25,7 @@
       </ngx-charts-pie-chart>
     </div>
   </div>
+  <ng-template #loading>
+    <div class="lds-ripple"><div></div><div></div></div>
+  </ng-template>
 </div>

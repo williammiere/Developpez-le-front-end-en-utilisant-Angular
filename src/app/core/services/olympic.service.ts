@@ -32,29 +32,23 @@ export class OlympicService {
     return this.olympics$.asObservable();
   }
 
- /* getCountryDetails(id: number): Observable<Olympic | undefined> {
+  getCountryDetails(id: number): Observable<Olympic | undefined> {
     return this.getOlympics().pipe(
-      map((olympics) => olympics.find((olympic) => olympic.id === id))
+      map((olympics) => olympics?.find(olympic => olympic.id === id))
     );
-  }*/
-
-    getCountryDetails(id: number): Observable<Olympic | undefined> {
-      return this.getOlympics().pipe(
-        map((olympics) => olympics?.find(olympic => olympic.id === id))
-      );
-    }
+  }
   
-    getCountryIdByName(name: string): Observable<number | undefined> {
-      return this.getOlympics().pipe(
-        map((olympics: Olympic[]) => {
-          const country = olympics.find(olympic => olympic.country === name);
-          return country ? country.id : undefined;
-        })
-      );
-    }
+  getCountryByName(name: string): Observable<number | undefined> {
+    return this.getOlympics().pipe(
+      map((olympics: Olympic[]) => {
+        const country = olympics.find(olympic => olympic.country === name);
+        return country ? country.id : undefined;
+      })
+    );
+  }
 
-    getTotalParticipations(participations: Participation[]): number {
-      return participations.length;
-    }
+  getTotalParticipations(participations: Participation[]): number {
+    return participations.length;
+  }
  
 }

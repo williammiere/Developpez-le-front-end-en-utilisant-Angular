@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { Observable, map, switchMap } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
@@ -28,52 +28,51 @@ export class DetailComponent implements OnInit {
   };
 
   
-  constructor(private olympicService: OlympicService,
-    private route: ActivatedRoute) { }
+  constructor(
+    private olympicService: OlympicService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
-    ngOnInit(): void {
-      this.countryDetails$ = this.route.params.pipe(
-        map(params => +params['id']),
-        switchMap(id => this.olympicService.getCountryDetails(id))
-      );
+  ngOnInit(): void {
+    this.countryDetails$ = this.route.params.pipe(
+      map(params => +params['id']),
+      switchMap(id => this.olympicService.getCountryDetails(id))
+    );
   
-      this.countryDetails$.subscribe(country => {
-        if (country) {
-          this.lineChartData = this.transformToLineChartData(country.participations);
-          this.totalAthletes = this.totalAthleteCount(country.participations);
-          this.totalParticipations = this.calculateTotalParticipations(country.participations);
-          this.medalLenght = this.totalMedalCount(country.participations);
-        }
-      });
-    }       
+    this.countryDetails$.subscribe(country => {
+      if (country) {
+        this.lineChartData = this.transformToLineChartData(country.participations);
+        this.totalAthletes = this.totalAthleteCount(country.participations);
+        this.totalParticipations = this.calculateTotalParticipations(country.participations);
+        this.medalLenght = this.totalMedalCount(country.participations);
+      }
+      else{
+        console.error('Country ID not found');
+        
+      }
+    });
+  }       
   
-    private transformToLineChartData(participations: Participation[]): any[] {
-      const medalsSeries = {
-        name: 'Medals Count',
-        series: participations.map((participation: Participation) => ({
-          name: participation.year.toString(),
-          value: participation.medalsCount
-        }))
-      };
+  private transformToLineChartData(participations: Participation[]): any[] {
+    const medalsSeries = {
+      name: 'Medals Count',
+      series: participations.map((participation: Participation) => ({
+        name: participation.year.toString(),
+        value: participation.medalsCount
+      }))
+    };
       
-      const athletesSeries = {
-        name: 'Athlete Count',
-        series: participations.map((participation: Participation) => ({
-          name: participation.year.toString(),
-          value: participation.athleteCount
-        }))
-      };
+    const athletesSeries = {
+      name: 'Athlete Count',
+      series: participations.map((participation: Participation) => ({
+        name: participation.year.toString(),
+        value: participation.athleteCount
+      }))
+    };
   
-     /* const participationsSeries = {
-        name: 'Participations Count',
-        series: participations.map((participation: Participation) => ({
-          name: participation.year.toString(),
-          value: 1// Each participation is counted as 1
-        }))
-      }*/
-  
-      return [medalsSeries, athletesSeries];
-    }
+    return [medalsSeries, athletesSeries];
+  }
+
   private totalAthleteCount(participations: Participation[]) : number {
     return participations.reduce((total, participation) => total + participation.athleteCount, 0);
   }
