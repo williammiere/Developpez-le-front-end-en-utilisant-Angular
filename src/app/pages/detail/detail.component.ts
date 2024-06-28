@@ -4,7 +4,6 @@ import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { Observable, map, switchMap } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { Participation } from 'src/app/core/models/Participation';
-import { Medal } from 'src/app/core/models/medal';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -17,6 +16,7 @@ export class DetailComponent implements OnInit {
   countryId: number | null = null;
   countryDetails$: Observable<Olympic | undefined> | undefined;
   lineChartData!: any[];
+  participations!: Participation[];
   totalParticipations: number = 0;
   totalAthletes!: number;
   medalLenght!: number;
@@ -43,15 +43,20 @@ export class DetailComponent implements OnInit {
       if (country) {
         this.lineChartData = this.transformToLineChartData(country.participations);
         this.totalAthletes = this.totalAthleteCount(country.participations);
-        this.totalParticipations = this.calculateTotalParticipations(country.participations);
+        this.totalParticipations = this.olympicService.getTotalParticipations(this.participations);
         this.medalLenght = this.totalMedalCount(country.participations);
       }
       else{
         console.error('Country ID not found');
+        //this.router.navigate(['/not-found']);
         
       }
     });
-  }       
+  }
+  
+  ngOnDestroy(){
+    
+  }
   
   private transformToLineChartData(participations: Participation[]): any[] {
     const medalsSeries = {
@@ -75,10 +80,6 @@ export class DetailComponent implements OnInit {
 
   private totalAthleteCount(participations: Participation[]) : number {
     return participations.reduce((total, participation) => total + participation.athleteCount, 0);
-  }
-
-  private calculateTotalParticipations(participations: Participation[]): number {
-    return participations.length;
   }
 
   private totalMedalCount(participations: Participation[]) : number {

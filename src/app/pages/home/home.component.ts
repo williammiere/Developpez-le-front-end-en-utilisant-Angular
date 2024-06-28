@@ -21,26 +21,33 @@ export class HomeComponent implements OnInit {
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.initMedals();
+    this.totalMedals();
   }
 
-  initMedals(): void{
+  ngOnDestroy(){
+  
+  }
+
+  //nombre total de médailles par pays
+  totalMedals(): void{
     this.olympicService.getOlympics().subscribe( olympics=>{
      this.countriesLength = olympics.length;
-    this.totalEntries = this.initParticipations(olympics);
+    this.totalEntries = this.totalParticipations(olympics);
      this.medals =  olympics.map((olympic: Olympic) => ({
           name: olympic.country,
           value: olympic.participations.reduce((acc: number, participation: Participation) => acc + participation.medalsCount, 0)}))})
   }
 
-  initParticipations(olympics: Olympic[]): number {
+  //Récupère le nombre total de participâtion.
+  totalParticipations(olympics: Olympic[]): number {
     const participations: Participation[] =  olympics.flatMap((olympic: Olympic) => olympic.participations);
     const cities: string[] = participations.map((partition: Participation) =>partition.city);
     return new Set(cities).size;
   }        
 
 
-  onCountrySelect(event: any): void {
+  //récupère l'ID lorsqu'on clique sur le nom
+  onCountrySelect(event: Medal): void {
     const countryName = event.name;
     this.olympicService.getCountryByName(countryName).subscribe((id) => {
       if (id !== undefined) {
@@ -50,7 +57,6 @@ export class HomeComponent implements OnInit {
       }
     });
   }
-  private calculateTotalParticipations(participations: Participation[]): number {
-    return participations.length;
-  }      
+  
+
 }
