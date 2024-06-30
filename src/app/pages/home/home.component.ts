@@ -16,13 +16,8 @@ export class HomeComponent implements OnInit {
   public olympicCount: number = 0;
   public countryCount: number = 0;
 
-  view: any = [700, 400];
-
   // options
-  gradient: boolean = true;
-  showLegend: boolean = true;
   showLabels: boolean = true;
-  isDoughnut: boolean = false;
   legendPosition: string = 'below';
 
   colorScheme: Color = {
