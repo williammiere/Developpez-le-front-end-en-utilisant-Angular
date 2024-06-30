@@ -1,4 +1,5 @@
 .head-title {
+  margin-top: 30px;
   background-color: #04838f;
   display: inline-block;
   color: white;
@@ -32,13 +33,12 @@
   justify-content: center;
   position: relative;
   width: 100%;
+}
 
-  div:first-child {
-    right: 0%;
-    margin-right: -55%;
-    box-sizing: border-box;
-    position: relative;
-  }
+.wrapper {
+  text-align: center;
+}
+
 .graph-container {
   display: flex;
   justify-content: center;
@@ -46,15 +46,7 @@
   height: 500px;
 }
 
-  div:last-child {
-    left: 0%;
-    box-sizing: border-box;
-    position: relative;
-    margin-left: -50%;
   }
 }
 
-.wrapper {
-  text-align: center;
-  margin-top: 50px;
 }
