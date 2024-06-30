@@ -39,6 +39,12 @@
     box-sizing: border-box;
     position: relative;
   }
+.graph-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}
 
   div:last-child {
     left: 0%;

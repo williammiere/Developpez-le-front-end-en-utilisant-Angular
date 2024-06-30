@@ -12,13 +12,15 @@
         <p>{{ countryCount }}</p>
       </div>
     </div>
-    <ngx-charts-pie-chart
-      [scheme]="colorScheme"
-      [results]="pieChartDataList"
-      [labels]="showLabels"
-      [animations]="false"
-      (select)="onSelect($event)"
-    >
-    </ngx-charts-pie-chart>
+    <div class="graph-container">
+      <ngx-charts-pie-chart
+        [scheme]="colorScheme"
+        [results]="pieChartDataList"
+        [labels]="showLabels"
+        [animations]="false"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-pie-chart>
+    </div>
   }
 </div>
