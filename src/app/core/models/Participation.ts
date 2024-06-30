@@ -2,6 +2,6 @@ export interface Participation {
     id: string;
     year: string;
     city: string;
-    medalCount: number;
+    medalsCount: number;
     athleteCount: number;
 }
