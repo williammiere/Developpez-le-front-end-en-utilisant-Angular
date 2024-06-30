@@ -25,43 +25,47 @@ export class HomeComponent implements OnInit {
   isDoughnut: boolean = false;
   legendPosition: string = 'below';
 
-  colorScheme: Color = { 
-    domain: ['#793d52', '#89a1db', '#9780a1', '#bfe0f1', '#b8cbe7', '#956065'], 
-    group: ScaleType.Ordinal, 
-    selectable: true, 
-    name: 'Customer Usage', 
-};
+  colorScheme: Color = {
+    domain: ['#793d52', '#89a1db', '#9780a1', '#bfe0f1', '#b8cbe7', '#956065'],
+    group: ScaleType.Ordinal,
+    selectable: true,
+    name: 'Customer Usage',
+  };
 
   constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
-    this.olympics$.subscribe( olympics => {
+    this.olympics$.subscribe((olympics) => {
+      this.countryCount = olympics.length;
+      this.olympicCount = this.getOlympicCount(olympics);
 
-        this.countryCount = olympics.length;
-        this.olympicCount = this.getOlympicCount(olympics);
-
-        olympics.forEach(olympic => {
-        this.pieChartDataList.push(new PieChartData(olympic.country, this.getMedalCountByOlympic(olympic)));
+      olympics.forEach((olympic) => {
+        this.pieChartDataList.push(
+          new PieChartData(
+            olympic.country,
+            this.getMedalCountByOlympic(olympic),
+          ),
+        );
       });
     });
   }
 
-  getMedalCountByOlympic(olympic : Olympic): number {
-    return olympic.participations.reduce((medalCount, participation) => { return medalCount + participation.medalsCount; }, 0);
+  getMedalCountByOlympic(olympic: Olympic): number {
+    return olympic.participations.reduce((medalCount, participation) => {
+      return medalCount + participation.medalsCount;
+    }, 0);
   }
 
-  getOlympicCount(olympics : Olympic[]): number {
-    let cities : Set<string> = new Set();
-    olympics.forEach(olympic => {
-      olympic.participations.forEach(participation => {
+  getOlympicCount(olympics: Olympic[]): number {
+    let cities: Set<string> = new Set();
+    olympics.forEach((olympic) => {
+      olympic.participations.forEach((participation) => {
         cities.add(participation.city);
       });
     });
     return cities.size;
   }
 
-  onSelect(data: PieChartData): void {
-
-  }
+  onSelect(data: PieChartData): void {}
 }

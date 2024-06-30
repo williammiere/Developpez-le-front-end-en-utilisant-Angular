@@ -1,54 +1,54 @@
 .head-title {
-    background-color: #04838f;
-    display: inline-block;
-    color: white;
-    font-size: 24px;
-    border-radius: 7px;
-    padding: 5px 10px 5px 10px;
+  background-color: #04838f;
+  display: inline-block;
+  color: white;
+  font-size: 24px;
+  border-radius: 7px;
+  padding: 5px 10px 5px 10px;
 }
 
 .information {
-    color: black;
-    font-size: 16px;
-    border-radius: 7px;
-    border: 2px solid #04838f;
-    padding: 10px 10px 5px 10px;
-    
-    p {
-        margin: 0px;
-    }
+  color: black;
+  font-size: 16px;
+  border-radius: 7px;
+  border: 2px solid #04838f;
+  padding: 10px 10px 5px 10px;
 
-    p:first-child {
-        margin-bottom: 2px;
-    }
+  p {
+    margin: 0px;
+  }
 
-    p:last-child {
-        font-weight: 800;
-    }
+  p:first-child {
+    margin-bottom: 2px;
+  }
+
+  p:last-child {
+    font-weight: 800;
+  }
 }
 
 .information-wrapper {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+
+  div:first-child {
+    right: 0%;
+    margin-right: -55%;
+    box-sizing: border-box;
     position: relative;
-    width: 100%;
+  }
 
-    div:first-child{
-        right: 0%;
-        margin-right: -55%;
-        box-sizing: border-box;
-        position: relative;
-    }
-
-    div:last-child {
-        left: 0%;
-        box-sizing: border-box;
-        position: relative;
-        margin-left: -50%;
-    }
+  div:last-child {
+    left: 0%;
+    box-sizing: border-box;
+    position: relative;
+    margin-left: -50%;
+  }
 }
 
 .wrapper {
-    text-align: center;
-    margin-top: 50px;
+  text-align: center;
+  margin-top: 50px;
 }
