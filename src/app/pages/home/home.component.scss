@@ -1,8 +1,5 @@
 .graph-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 500px;
+  margin: 20px auto;
 }
 
 @media screen and (max-width: 432px) {
@@ -10,10 +7,18 @@
     flex-direction: column;
     gap: 10px;
   }
+
+  .graph-container {
+    height: 200px;
+  }
 }
 
 @media screen and (min-width: 433px) {
   .information-wrapper {
     gap: 50px;
+  }
+
+  .graph-container {
+    height: 500px;
   }
 }
