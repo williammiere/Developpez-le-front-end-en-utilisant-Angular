@@ -1,1 +1,21 @@
-<p>detail works!</p>
+<div class="wrapper">
+  <div class="head-title">{{ countryName }}</div>
+  <br /><br />
+  @if ((olympics$ | async)?.length != 0) {
+    <div class="information-wrapper">
+      <div class="information">
+        <p>Number of entries</p>
+        <p>{{ entryCount }}</p>
+      </div>
+      <div class="information">
+        <p>Total number medals</p>
+        <p>{{ medalCount }}</p>
+      </div>
+      <div class="information">
+        <p>Total number of athletes</p>
+        <p>{{ athleteCount }}</p>
+      </div>
+    </div>
+    <div class="graph-container"></div>
+  }
+</div>
