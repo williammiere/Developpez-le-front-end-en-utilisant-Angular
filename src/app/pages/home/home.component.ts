@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { Observable, of } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
@@ -27,7 +28,10 @@ export class HomeComponent implements OnInit {
     name: 'Customer Usage',
   };
 
-  constructor(private olympicService: OlympicService) {}
+  constructor(
+    private olympicService: OlympicService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
@@ -40,6 +44,7 @@ export class HomeComponent implements OnInit {
           new PieChartData(
             olympic.country,
             this.getMedalCountByOlympic(olympic),
+            { id: olympic.id },
           ),
         );
       });
@@ -62,5 +67,7 @@ export class HomeComponent implements OnInit {
     return cities.size;
   }
 
-  onSelect(data: PieChartData): void {}
+  onSelect(data: PieChartData): void {
+    this.router.navigateByUrl(`detail/${data.extra['id']}`);
+  }
 }
