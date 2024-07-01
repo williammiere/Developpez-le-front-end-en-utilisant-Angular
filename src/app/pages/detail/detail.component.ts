@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Color, ScaleType } from '@swimlane/ngx-charts';
-import { Observable, map, switchMap } from 'rxjs';
+import { Color, ScaleType, id } from '@swimlane/ngx-charts';
+import { Observable, Subscription, map, switchMap } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { Participation } from 'src/app/core/models/Participation';
-import { Medal } from 'src/app/core/models/medal';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -16,7 +15,7 @@ export class DetailComponent implements OnInit {
 
   countryId: number | null = null;
   countryDetails$: Observable<Olympic | undefined> | undefined;
-  lineChartData!: any[];
+  lineChartData!: Olympic[];
   totalParticipations: number = 0;
   totalAthletes!: number;
   medalLenght!: number;
@@ -26,6 +25,8 @@ export class DetailComponent implements OnInit {
     group: ScaleType.Ordinal,
     domain: ['#5AA454', '#A10A28', '#C7B42C']
   };
+  olympicSubscription!: Subscription;
+  countryName!: string;
 
   
   constructor(
@@ -34,25 +35,27 @@ export class DetailComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.countryDetails$ = this.route.params.pipe(
-      map(params => +params['id']),
-      switchMap(id => this.olympicService.getCountryDetails(id))
-    );
-  
-    this.countryDetails$.subscribe(country => {
-      if (country) {
+
+    const idCountry: number = this.route.snapshot.params['id'];
+    console.log(idCountry);
+    this.olympicSubscription = this.olympicService.getCountryDetails(idCountry).subscribe({
+      next: (country: Olympic) => {
         this.lineChartData = this.transformToLineChartData(country.participations);
         this.totalAthletes = this.totalAthleteCount(country.participations);
         this.totalParticipations = this.calculateTotalParticipations(country.participations);
+        this.countryName = country.country;
         this.medalLenght = this.totalMedalCount(country.participations);
-      }
-      else{
-        console.error('Country ID not found');
-        
-      }
-    });
-  }       
+      },
+      error: (error: Error) => this.router.navigate(['/not-found'])   
+    })
   
+  }
+
+  /**
+   * Transforms participations into data for the line chart.
+   * @param participations list participations 
+   * @returns an array of data series for the chart. 
+   */
   private transformToLineChartData(participations: Participation[]): any[] {
     const medalsSeries = {
       name: 'Medals Count',
@@ -73,14 +76,29 @@ export class DetailComponent implements OnInit {
     return [medalsSeries, athletesSeries];
   }
 
+  /**
+   * Calculates the total number of athletes
+   * @param participations list of participations
+   * @returns the total number of athletes
+   */
   private totalAthleteCount(participations: Participation[]) : number {
     return participations.reduce((total, participation) => total + participation.athleteCount, 0);
   }
 
+  /**
+   * Calculates the total number of participations.
+   * @param participations list of participations
+   * @returns the total number of participations.
+   */
   private calculateTotalParticipations(participations: Participation[]): number {
     return participations.length;
   }
 
+  /**
+   * Calculates the total number of medals.
+   * @param participations list of participations
+   * @returns the total number of medals.
+   */
   private totalMedalCount(participations: Participation[]) : number {
     return participations.reduce((total, participation) => total + participation.medalsCount, 0);
   }

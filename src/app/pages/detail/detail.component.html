@@ -1,6 +1,6 @@
 <div class="detail-container" *ngIf="lineChartData; else loading">
-  <div *ngIf="countryDetails$ |async as country" class="header">
-    <h2>{{country.country}}</h2>
+  <div class="header">
+    <h2>{{countryName}}</h2>
   </div>
   <div class="info">
     <div class="info-item">
@@ -31,10 +31,12 @@
     [timeline]="true">
   </ngx-charts-line-chart>
   </div>
-  
+
 </div>
-<ng-template #loading>
-  <div class="lds-ripple"><div></div><div></div></div>
+<ng-template #loading class="loading">
+  <div class="loading-container">
+    <div class="lds-ripple"><div></div><div></div></div>
+  </div>
 </ng-template>
 <div class="back-link">
   <p>

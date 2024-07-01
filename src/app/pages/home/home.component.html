@@ -1,5 +1,6 @@
  <div class="chart-container">
   <h2 class="title">Medals per Country</h2>
+
   <div class="info-container">
     <div class="joCount">
       <p>Number of JOs</p>
@@ -10,6 +11,7 @@
       <p>{{countriesLength}}</p>
     </div>
   </div>
+  
   <div class="chartPie">
     <div *ngIf="medals.length != 0; else loading" id="pie">
       <ngx-charts-pie-chart
@@ -28,4 +30,5 @@
   <ng-template #loading>
     <div class="lds-ripple"><div></div><div></div></div>
   </ng-template>
+
 </div>

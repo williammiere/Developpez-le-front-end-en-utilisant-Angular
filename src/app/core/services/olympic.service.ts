@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Olympic} from '../models/Olympic';
 import { Participation } from '../models/Participation';
@@ -17,7 +17,9 @@ export class OlympicService {
 
   loadInitialData() {
     return this.http.get<Olympic[]>(this.olympicUrl).pipe(
-      tap((value) => this.olympics$.next(value)),
+      tap((value) => {this.olympics$.next(value);
+        console.log("Bonjour")
+      }),
       catchError((error, caught) => {
         // TODO: improve error handling
         console.error(error);
@@ -32,11 +34,19 @@ export class OlympicService {
     return this.olympics$.asObservable();
   }
 
-  getCountryDetails(id: number): Observable<Olympic | undefined> {
-    return this.getOlympics().pipe(
-      map((olympics) => olympics?.find(olympic => olympic.id === id))
-    );
-  }
+  getCountryDetails(id: number): Observable<Olympic> {
+    return  this.http.get<Olympic[]>(this.olympicUrl).pipe(
+      map((olympics) => { 
+        console.log(olympics);
+    const olympic =  olympics?.find(olympic => olympic.id == id );
+    if(!olympic){
+      console.error('Country not found:', id);
+  throw new Error('Country not found');
+    }
+    return olympic;
+      } )
+    )
+      }
   
   getCountryByName(name: string): Observable<number | undefined> {
     return this.getOlympics().pipe(
