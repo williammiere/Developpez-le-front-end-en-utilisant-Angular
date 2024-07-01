@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DetailComponent } from './pages/detail/detail.component';
 
@@ -15,7 +16,13 @@ import { DetailComponent } from './pages/detail/detail.component';
     DetailComponent,
     NotFoundComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, NgxChartsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    NgxChartsModule,
+    BrowserAnimationsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

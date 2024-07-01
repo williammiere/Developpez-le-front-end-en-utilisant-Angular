@@ -16,6 +16,19 @@
         <p>{{ athleteCount }}</p>
       </div>
     </div>
-    <div class="graph-container"></div>
+    <div class="graph-container">
+      <ngx-charts-line-chart
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisTicks]="xAxisTicks"
+        [xAxisTickFormatting]="xAxisTickFormatting"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [results]="lineChartDataList"
+      >
+      </ngx-charts-line-chart>
+    </div>
   }
 </div>
