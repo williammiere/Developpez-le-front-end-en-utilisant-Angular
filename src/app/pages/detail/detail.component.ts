@@ -27,6 +27,10 @@ export class DetailComponent implements OnInit {
     const olympicId: string = this.route.snapshot.params['id'];
     this.olympics$ = this.olympicService.getOlympics();
     this.olympics$.subscribe((olympics) => {
+      if (olympics.length == 0) {
+        return;
+      }
+
       let olympic: Olympic | undefined = olympics.find(
         (olympic) => olympic.id == olympicId,
       );
