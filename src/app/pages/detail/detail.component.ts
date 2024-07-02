@@ -45,34 +45,46 @@ export class DetailComponent implements OnInit {
     const olympicId: string = this.route.snapshot.params['id'];
     this.olympics$ = this.olympicService.getOlympics();
     this.olympics$.subscribe((olympics) => {
-      if (olympics.length == 0) {
-        return;
-      }
-
-      let olympic: Olympic | undefined = olympics.find(
-        (olympic) => olympic.id == olympicId,
-      );
-
-      if (olympic === undefined) {
-        this.router.navigateByUrl('');
-        return;
-      }
-
-      this.countryName = olympic.country;
-      this.entryCount = olympic.participations.length;
-      this.medalCount = this.getMedalCount(olympic);
-      this.athleteCount = this.getAthleteCount(olympic);
-
-      let series: LineChartSerieData[] = [];
-      olympic.participations.forEach((participation) => {
-        series.push(
-          new LineChartSerieData(participation.medalsCount, participation.year),
-        );
-        this.xAxisTicks.push(participation.year);
-      });
-
-      this.lineChartDataList.push(new LineChartData(olympic.country, series));
+      this.onOlympicsChanged(olympics, olympicId);
     });
+  }
+
+  onOlympicsChanged(olympics: Olympic[], olympicId: string): void {
+    if (olympics.length == 0) {
+      return;
+    }
+
+    let olympic: Olympic | undefined = olympics.find(
+      (olympic) => olympic.id == olympicId,
+    );
+
+    if (olympic === undefined) {
+      this.router.navigateByUrl('');
+      return;
+    }
+
+    this.countryName = olympic.country;
+    this.entryCount = olympic.participations.length;
+    this.medalCount = this.getMedalCount(olympic);
+    this.athleteCount = this.getAthleteCount(olympic);
+
+    this.fillChart(olympic);
+  }
+
+  fillChart(olympic: Olympic): void {
+    let series: LineChartSerieData[] = [];
+
+    this.xAxisTicks = [];
+    this.lineChartDataList = [];
+
+    olympic.participations.forEach((participation) => {
+      series.push(
+        new LineChartSerieData(participation.medalsCount, participation.year),
+      );
+      this.xAxisTicks.push(participation.year);
+    });
+
+    this.lineChartDataList.push(new LineChartData(olympic.country, series));
   }
 
   getMedalCount(olympic: Olympic): number {
