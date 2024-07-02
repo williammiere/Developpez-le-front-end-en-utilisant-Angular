@@ -52,7 +52,7 @@ export class DetailComponent implements OnInit {
     );
 
     if (olympic === undefined) {
-      this.router.navigateByUrl('');
+      this.router.navigateByUrl('**');
       return;
     }
 
