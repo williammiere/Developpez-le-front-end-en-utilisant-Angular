@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
 
   onOlympicsChanged(olympics: Olympic[]) {
     this.countryCount = olympics.length;
-    this.olympicCount = this.getOlympicCount(olympics);
+    this.olympicCount = this.olympicService.getOlympicCount(olympics);
     this.fillChart(olympics);
   }
 
@@ -50,27 +50,11 @@ export class HomeComponent implements OnInit {
       this.pieChartDataList.push(
         new PieChartData(
           olympic.country,
-          this.getMedalCountByOlympic(olympic),
+          this.olympicService.getMedalCountByOlympic(olympic),
           { id: olympic.id },
         ),
       );
     });
-  }
-
-  getMedalCountByOlympic(olympic: Olympic): number {
-    return olympic.participations.reduce((medalCount, participation) => {
-      return medalCount + participation.medalsCount;
-    }, 0);
-  }
-
-  getOlympicCount(olympics: Olympic[]): number {
-    let cities: Set<string> = new Set();
-    olympics.forEach((olympic) => {
-      olympic.participations.forEach((participation) => {
-        cities.add(participation.city);
-      });
-    });
-    return cities.size;
   }
 
   onSelect(data: PieChartData): void {

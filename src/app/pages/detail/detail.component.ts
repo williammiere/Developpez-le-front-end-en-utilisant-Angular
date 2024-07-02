@@ -59,8 +59,8 @@ export class DetailComponent implements OnInit {
 
     this.countryName = olympic.country;
     this.entryCount = olympic.participations.length;
-    this.medalCount = this.getMedalCount(olympic);
-    this.athleteCount = this.getAthleteCount(olympic);
+    this.medalCount = this.olympicService.getMedalCountByOlympic(olympic);
+    this.athleteCount = this.olympicService.getAthleteCount(olympic);
 
     this.fillChart(olympic);
   }
@@ -79,18 +79,6 @@ export class DetailComponent implements OnInit {
     });
 
     this.lineChartDataList.push(new LineChartData(olympic.country, series));
-  }
-
-  getMedalCount(olympic: Olympic): number {
-    return olympic.participations.reduce((medalCount, participation) => {
-      return medalCount + participation.medalsCount;
-    }, 0);
-  }
-
-  getAthleteCount(olympic: Olympic): number {
-    return olympic.participations.reduce((athleteCount, participation) => {
-      return athleteCount + participation.athleteCount;
-    }, 0);
   }
 
   xAxisTickFormatting(value: string) {

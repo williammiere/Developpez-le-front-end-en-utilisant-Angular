@@ -29,4 +29,26 @@ export class OlympicService {
   getOlympics(): Observable<Olympic[]> {
     return this.olympics$.asObservable();
   }
+
+  getMedalCountByOlympic(olympic: Olympic): number {
+    return olympic.participations.reduce((medalCount, participation) => {
+      return medalCount + participation.medalsCount;
+    }, 0);
+  }
+
+  getOlympicCount(olympics: Olympic[]): number {
+    let cities: Set<string> = new Set();
+    olympics.forEach((olympic) => {
+      olympic.participations.forEach((participation) => {
+        cities.add(participation.city);
+      });
+    });
+    return cities.size;
+  }
+
+  getAthleteCount(olympic: Olympic): number {
+    return olympic.participations.reduce((athleteCount, participation) => {
+      return athleteCount + participation.athleteCount;
+    }, 0);
+  }
 }
