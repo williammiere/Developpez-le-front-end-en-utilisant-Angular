@@ -37,7 +37,6 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
 
     const idCountry: number = this.route.snapshot.params['id'];
-    console.log(idCountry);
     this.olympicSubscription = this.olympicService.getCountryDetails(idCountry).subscribe({
       next: (country: Olympic) => {
         this.lineChartData = this.transformToLineChartData(country.participations);
@@ -49,6 +48,10 @@ export class DetailComponent implements OnInit {
       error: (error: Error) => this.router.navigate(['/not-found'])   
     })
   
+  }
+
+  ngOnDestroy(){
+    this.olympicSubscription.unsubscribe();
   }
 
   /**

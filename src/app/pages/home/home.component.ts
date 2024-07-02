@@ -29,8 +29,12 @@ export class HomeComponent implements OnInit {
     this.olympicServiceSubscription.unsubscribe();
   }
 
-  //nombre total de médailles par pays
-  totalMedals(): void{
+  /**
+   * Calculates the total number of medals for each country.
+   * Subscribes to the OlympicService to get the Olympics data,
+   * then maps it to the medals array.
+   */
+  private totalMedals(): void{
    this.olympicServiceSubscription =  this.olympicService.getOlympics().subscribe( olympics=>{
      this.countriesLength = olympics.length;
     this.totalEntries = this.totalParticipations(olympics);
@@ -41,7 +45,7 @@ export class HomeComponent implements OnInit {
 
   
   /**
-   * Récupère le nombre total de participation.
+   * Calculates the total number of unique participations in the Olympic games.
    * @param olympics olympic list
    * @returns  total number of olympics game participation
    */
@@ -54,8 +58,9 @@ export class HomeComponent implements OnInit {
 
   
   /**
-   * récupère l'ID lorsqu'on clique sur le nom
-   * @param event 
+   * Retrieves the country ID by its name and navigates to the detail page if the ID is found.
+   * Logs an error if the country ID is not found.
+   * @param event containing the selected country's name
    */
   onCountrySelect(event: Medal): void {
     const countryName = event.name;
