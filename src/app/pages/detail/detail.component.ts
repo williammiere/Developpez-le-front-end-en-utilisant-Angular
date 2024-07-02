@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import {LineChartData, LineChartSerieData } from 'src/app/core/models/LineChartData';
+import {LineChartData } from 'src/app/core/models/LineChartData';
+import { LineChartSerieData } from 'src/app/core/models/LineChartSerieData';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 

@@ -1,9 +1,4 @@
-export class LineChartSerieData {
-  constructor(
-    public value: number,
-    public name: string,
-  ) {}
-}
+import { LineChartSerieData } from "./LineChartSerieData";
 
 export class LineChartData {
   constructor(
