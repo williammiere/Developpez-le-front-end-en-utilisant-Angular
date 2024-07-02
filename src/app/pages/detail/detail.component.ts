@@ -11,7 +11,7 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrl: './detail.component.scss',
 })
 export class DetailComponent implements OnInit {
-  public olympics$: Observable<Olympic[]> = of([]);
+  olympics$: Observable<Olympic[]> = of([]);
 
   countryName: string = '';
   entryCount: number = 0;
@@ -26,7 +26,7 @@ export class DetailComponent implements OnInit {
   xAxisLabel: string = 'Dates';
   yAxisLabel: string = 'Medal count';
   xAxisTicks: string[] = [];
-  public lineChartDataList: LineChartData[] = [];
+  lineChartDataList: LineChartData[] = [];
 
   constructor(
     private olympicService: OlympicService,

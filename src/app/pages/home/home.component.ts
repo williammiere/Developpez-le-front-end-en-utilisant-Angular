@@ -12,11 +12,11 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  public olympics$: Observable<Olympic[]> = of([]);
-  public olympicCount: number = 0;
-  public countryCount: number = 0;
+  olympics$: Observable<Olympic[]> = of([]);
+  olympicCount: number = 0;
+  countryCount: number = 0;
 
-  // options
+  // Chart parameters
   showLabels: boolean = true;
   colorScheme: Color = {
     domain: ['#793d52', '#89a1db', '#9780a1', '#bfe0f1', '#b8cbe7', '#956065'],
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     selectable: true,
     name: 'Customer Usage',
   };
-  public pieChartDataList: PieChartData[] = [];
+  pieChartDataList: PieChartData[] = [];
 
   constructor(
     private olympicService: OlympicService,
