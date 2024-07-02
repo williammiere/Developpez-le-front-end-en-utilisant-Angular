@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import {LineChartData } from 'src/app/core/models/LineChartData';
 import { LineChartSerieData } from 'src/app/core/models/LineChartSerieData';
 import { Olympic } from 'src/app/core/models/Olympic';
@@ -13,6 +13,7 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class DetailComponent implements OnInit {
   olympics$: Observable<Olympic[]> = of([]);
+  olympicSubscription!: Subscription;
 
   countryName: string = '';
   entryCount: number = 0;
@@ -38,7 +39,7 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
     const olympicId: string = this.route.snapshot.params['id'];
     this.olympics$ = this.olympicService.getOlympics();
-    this.olympics$.subscribe((olympics) => {
+    this.olympicSubscription = this.olympics$.subscribe((olympics) => {
       this.onOlympicsChanged(olympics, olympicId);
     });
   }
@@ -83,5 +84,9 @@ export class DetailComponent implements OnInit {
 
   xAxisTickFormatting(value: string) {
     return value;
+  }
+
+  ngOnDestroy(): void {
+    this.olympicSubscription.unsubscribe();
   }
 }

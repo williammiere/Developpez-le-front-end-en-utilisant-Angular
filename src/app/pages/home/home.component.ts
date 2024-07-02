@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { PieChartData } from 'src/app/core/models/PieChartData';
 import { OlympicService } from 'src/app/core/services/olympic.service';
@@ -13,6 +13,7 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class HomeComponent implements OnInit {
   olympics$: Observable<Olympic[]> = of([]);
+  olympicSubscription!: Subscription;
   olympicCount: number = 0;
   countryCount: number = 0;
 
@@ -33,7 +34,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
-    this.olympics$.subscribe((olympics) => {
+    this.olympicSubscription = this.olympics$.subscribe((olympics) => {
       this.onOlympicsChanged(olympics);
     });
   }
@@ -59,5 +60,9 @@ export class HomeComponent implements OnInit {
 
   onSelect(data: PieChartData): void {
     this.router.navigateByUrl(`detail/${data.extra['id']}`);
+  }
+
+  ngOnDestroy(): void {
+    this.olympicSubscription.unsubscribe();
   }
 }
