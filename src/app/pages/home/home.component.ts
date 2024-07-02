@@ -13,20 +13,18 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class HomeComponent implements OnInit {
   public olympics$: Observable<Olympic[]> = of([]);
-  public pieChartDataList: PieChartData[] = [];
   public olympicCount: number = 0;
   public countryCount: number = 0;
 
   // options
   showLabels: boolean = true;
-  legendPosition: string = 'below';
-
   colorScheme: Color = {
     domain: ['#793d52', '#89a1db', '#9780a1', '#bfe0f1', '#b8cbe7', '#956065'],
     group: ScaleType.Ordinal,
     selectable: true,
     name: 'Customer Usage',
   };
+  public pieChartDataList: PieChartData[] = [];
 
   constructor(
     private olympicService: OlympicService,
@@ -36,18 +34,26 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
     this.olympics$.subscribe((olympics) => {
-      this.countryCount = olympics.length;
-      this.olympicCount = this.getOlympicCount(olympics);
+      this.onOlympicsChanged(olympics);
+    });
+  }
 
-      olympics.forEach((olympic) => {
-        this.pieChartDataList.push(
-          new PieChartData(
-            olympic.country,
-            this.getMedalCountByOlympic(olympic),
-            { id: olympic.id },
-          ),
-        );
-      });
+  onOlympicsChanged(olympics: Olympic[]) {
+    this.countryCount = olympics.length;
+    this.olympicCount = this.getOlympicCount(olympics);
+    this.fillChart(olympics);
+  }
+
+  fillChart(olympics: Olympic[]) {
+    this.pieChartDataList = [];
+    olympics.forEach((olympic) => {
+      this.pieChartDataList.push(
+        new PieChartData(
+          olympic.country,
+          this.getMedalCountByOlympic(olympic),
+          { id: olympic.id },
+        ),
+      );
     });
   }
 
