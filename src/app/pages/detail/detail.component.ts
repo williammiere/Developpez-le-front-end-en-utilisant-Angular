@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { LineChartData } from 'src/app/core/models/LineChartData';
 import { LineChartSerieData } from 'src/app/core/models/LineChartSerieData';
-import { Olympic } from 'src/app/core/models/Olympic';
+import { OlympicParticipant } from 'src/app/core/models/OlympicParticipant';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -12,8 +12,8 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrl: './detail.component.scss',
 })
 export class DetailComponent implements OnInit {
-  olympics$: Observable<Olympic[]> = of([]);
-  olympicSubscription!: Subscription;
+  participants$: Observable<OlympicParticipant[]> = of([]);
+  participantsSubscription!: Subscription;
 
   countryName: string = '';
   entryCount: number = 0;
@@ -37,49 +37,49 @@ export class DetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const olympicId: string = this.route.snapshot.params['id'];
-    this.olympics$ = this.olympicService.getOlympics();
-    this.olympicSubscription = this.olympics$.subscribe((olympics) => {
-      this.onOlympicsChanged(olympics, olympicId);
+    const participantId: string = this.route.snapshot.params['id'];
+    this.participants$ = this.olympicService.getOlympicParticipants();
+    this.participantsSubscription = this.participants$.subscribe((olympics) => {
+      this.onParticipantsChanged(olympics, participantId);
     });
   }
 
-  onOlympicsChanged(olympics: Olympic[], olympicId: string): void {
-    if (olympics.length == 0) {
+  onParticipantsChanged(participants: OlympicParticipant[], participantId: string): void {
+    if (participants.length == 0) {
       return;
     }
 
-    const olympic: Olympic | undefined = olympics.find(
-      (olympic) => olympic.id == olympicId
+    const participant: OlympicParticipant | undefined = participants.find(
+      (participant) => participant.id == participantId
     );
 
-    if (olympic === undefined) {
+    if (participant === undefined) {
       this.router.navigateByUrl('**');
       return;
     }
 
-    this.countryName = olympic.country;
-    this.entryCount = olympic.participations.length;
-    this.medalCount = this.olympicService.getMedalCountByOlympic(olympic);
-    this.athleteCount = this.olympicService.getAthleteCount(olympic);
+    this.countryName = participant.country;
+    this.entryCount = participant.participations.length;
+    this.medalCount = this.olympicService.getMedalCountByCountry(participant);
+    this.athleteCount = this.olympicService.getAthleteCount(participant);
 
-    this.fillChart(olympic);
+    this.fillChart(participant);
   }
 
-  fillChart(olympic: Olympic): void {
+  fillChart(participant: OlympicParticipant): void {
     const series: LineChartSerieData[] = [];
 
     this.xAxisTicks = [];
     this.lineChartDataList = [];
 
-    olympic.participations.forEach((participation) => {
+    participant.participations.forEach((participation) => {
       series.push(
         new LineChartSerieData(participation.medalsCount, participation.year)
       );
       this.xAxisTicks.push(participation.year);
     });
 
-    this.lineChartDataList.push(new LineChartData(olympic.country, series));
+    this.lineChartDataList.push(new LineChartData(participant.country, series));
   }
 
   xAxisTickFormatting(value: string) {
@@ -87,6 +87,6 @@ export class DetailComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.olympicSubscription.unsubscribe();
+    this.participantsSubscription.unsubscribe();
   }
 }

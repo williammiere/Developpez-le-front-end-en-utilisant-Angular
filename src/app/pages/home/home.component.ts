@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { Observable, of, Subscription } from 'rxjs';
-import { Olympic } from 'src/app/core/models/Olympic';
+import { OlympicParticipant } from 'src/app/core/models/OlympicParticipant';
 import { PieChartData } from 'src/app/core/models/PieChartData';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
@@ -12,10 +12,10 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  olympics$: Observable<Olympic[]> = of([]);
-  olympicSubscription!: Subscription;
+  participants$: Observable<OlympicParticipant[]> = of([]);
+  participantsSubscription!: Subscription;
   olympicCount: number = 0;
-  countryCount: number = 0;
+  participantCount: number = 0;
 
   // Chart parameters
   showLabels: boolean = true;
@@ -30,25 +30,25 @@ export class HomeComponent implements OnInit {
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.olympics$ = this.olympicService.getOlympics();
-    this.olympicSubscription = this.olympics$.subscribe((olympics) => {
-      this.onOlympicsChanged(olympics);
+    this.participants$ = this.olympicService.getOlympicParticipants();
+    this.participantsSubscription = this.participants$.subscribe((olympics) => {
+      this.onParticipantsChanged(olympics);
     });
   }
 
-  onOlympicsChanged(olympics: Olympic[]) {
-    this.countryCount = olympics.length;
-    this.olympicCount = this.olympicService.getOlympicCount(olympics);
-    this.fillChart(olympics);
+  onParticipantsChanged(participants: OlympicParticipant[]) {
+    this.participantCount = participants.length;
+    this.olympicCount = this.olympicService.getOlympicCount(participants);
+    this.fillChart(participants);
   }
 
-  fillChart(olympics: Olympic[]) {
+  fillChart(participants: OlympicParticipant[]) {
     this.pieChartDataList = [];
-    olympics.forEach((olympic) => {
+    participants.forEach((olympic) => {
       this.pieChartDataList.push(
         new PieChartData(
           olympic.country,
-          this.olympicService.getMedalCountByOlympic(olympic),
+          this.olympicService.getMedalCountByCountry(olympic),
           { id: olympic.id }
         )
       );
@@ -60,6 +60,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.olympicSubscription.unsubscribe();
+    this.participantsSubscription.unsubscribe();
   }
 }

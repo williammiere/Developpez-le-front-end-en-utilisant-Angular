@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="head-title">Medals per Country</div>
   <br /><br />
-  @if ((olympics$ | async)?.length != 0) {
+  @if ((participants$ | async)?.length != 0) {
     <div class="information-wrapper">
       <div class="information">
         <p>Number of JOs</p>
@@ -9,7 +9,7 @@
       </div>
       <div class="information">
         <p>Number of countries</p>
-        <p>{{ countryCount }}</p>
+        <p>{{ participantCount }}</p>
       </div>
     </div>
     <div class="graph-container">
