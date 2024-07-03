@@ -37,7 +37,7 @@ export class OlympicService {
   }
 
   getOlympicCount(olympics: Olympic[]): number {
-    let cities: Set<string> = new Set();
+    const cities: Set<string> = new Set();
     olympics.forEach((olympic) => {
       olympic.participations.forEach((participation) => {
         cities.add(participation.city);

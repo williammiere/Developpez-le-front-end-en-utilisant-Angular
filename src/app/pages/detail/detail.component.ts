@@ -49,7 +49,7 @@ export class DetailComponent implements OnInit {
       return;
     }
 
-    let olympic: Olympic | undefined = olympics.find(
+    const olympic: Olympic | undefined = olympics.find(
       (olympic) => olympic.id == olympicId,
     );
 
@@ -67,7 +67,7 @@ export class DetailComponent implements OnInit {
   }
 
   fillChart(olympic: Olympic): void {
-    let series: LineChartSerieData[] = [];
+    const series: LineChartSerieData[] = [];
 
     this.xAxisTicks = [];
     this.lineChartDataList = [];
