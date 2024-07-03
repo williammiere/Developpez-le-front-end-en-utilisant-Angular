@@ -4,6 +4,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { OlympicParticipant } from '../models/OlympicParticipant';
 
+/**
+ * Service handling the olympic games.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -30,12 +33,12 @@ export class OlympicService {
     return this.olympicParticipants$.asObservable();
   }
 
-  getMedalCountByCountry(participant: OlympicParticipant): number {
-    return participant.participations.reduce((medalCount, participation) => {
-      return medalCount + participation.medalsCount;
-    }, 0);
-  }
-
+  /**
+   * Returns the number of olympic games.
+   *
+   * @param participant the list of participating countries
+   * @returns the number of olympic games.
+   */
   getOlympicCount(participant: OlympicParticipant[]): number {
     let cities: Set<string> = new Set();
     participant.forEach((olympic) => {
@@ -46,9 +49,29 @@ export class OlympicService {
     return cities.size;
   }
 
+  /**
+   * Returns the total number of athletes of a country,
+   * who participated to olympic games.
+   *
+   * @param participant the participating country.
+   * @returns the athlete count of each participation of the country.
+   */
   getAthleteCount(participant: OlympicParticipant): number {
     return participant.participations.reduce((athleteCount, participation) => {
       return athleteCount + participation.athleteCount;
+    }, 0);
+  }
+
+  /**
+   * Returns the number of medal earned by
+   * a country for all olympic games.
+   *
+   * @param participant the participating country.
+   * @returns the medal count of each participation of the country.
+   */
+  getMedalCount(participant: OlympicParticipant): number {
+    return participant.participations.reduce((medalCount, participation) => {
+      return medalCount + participation.medalsCount;
     }, 0);
   }
 }

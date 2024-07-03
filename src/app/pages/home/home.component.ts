@@ -6,6 +6,9 @@ import { OlympicParticipant } from 'src/app/core/models/OlympicParticipant';
 import { PieChartData } from 'src/app/core/models/PieChartData';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
+/**
+ * Represents the Home page.
+ */
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -31,30 +34,46 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.participants$ = this.olympicService.getOlympicParticipants();
-    this.participantsSubscription = this.participants$.subscribe((olympics) => {
-      this.onParticipantsChanged(olympics);
+    this.participantsSubscription = this.participants$.subscribe((participants) => {
+      this.onParticipantsChanged(participants);
     });
   }
 
+  /**
+   * Called when the participants are updated.
+   * 
+   * @param participants participating country
+   */
   onParticipantsChanged(participants: OlympicParticipant[]) {
     this.participantCount = participants.length;
     this.olympicCount = this.olympicService.getOlympicCount(participants);
     this.fillChart(participants);
   }
 
+  /**
+   * Fills the pie chart with the participating countries data.
+   * This chart shows the earned medal count distribution for each country. 
+   * 
+   * @param participants participating countries
+   */
   fillChart(participants: OlympicParticipant[]) {
     this.pieChartDataList = [];
     participants.forEach((olympic) => {
       this.pieChartDataList.push(
         new PieChartData(
           olympic.country,
-          this.olympicService.getMedalCountByCountry(olympic),
+          this.olympicService.getMedalCount(olympic),
           { id: olympic.id }
         )
       );
     });
   }
 
+  /**
+   * Called when clicking on a pie chart slice.
+   * 
+   * @param data data of the related slice.
+   */
   onSelect(data: PieChartData): void {
     this.router.navigateByUrl(`detail/${data.extra['id']}`);
   }

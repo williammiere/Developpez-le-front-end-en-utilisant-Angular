@@ -6,6 +6,9 @@ import { LineChartSerieData } from 'src/app/core/models/LineChartSerieData';
 import { OlympicParticipant } from 'src/app/core/models/OlympicParticipant';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
+/**
+ * Represents the detail page.
+ */
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -39,11 +42,17 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
     const participantId: string = this.route.snapshot.params['id'];
     this.participants$ = this.olympicService.getOlympicParticipants();
-    this.participantsSubscription = this.participants$.subscribe((olympics) => {
-      this.onParticipantsChanged(olympics, participantId);
+    this.participantsSubscription = this.participants$.subscribe((participants) => {
+      this.onParticipantsChanged(participants, participantId);
     });
   }
 
+  /**
+   * Called when the participants are updated.
+   * 
+   * @param participants updated participants.
+   * @param participantId id of the displayed participant.
+   */
   onParticipantsChanged(participants: OlympicParticipant[], participantId: string): void {
     if (participants.length == 0) {
       return;
@@ -60,12 +69,19 @@ export class DetailComponent implements OnInit {
 
     this.countryName = participant.country;
     this.entryCount = participant.participations.length;
-    this.medalCount = this.olympicService.getMedalCountByCountry(participant);
+    this.medalCount = this.olympicService.getMedalCount(participant);
     this.athleteCount = this.olympicService.getAthleteCount(participant);
 
     this.fillChart(participant);
   }
 
+  /**
+   * Fills the line chart with the data of a participant.
+   * This chart represents the medal count of the country through the years.
+   * Only years when there was a participation are displayed.
+   * 
+   * @param participant country represented on the chart.
+   */
   fillChart(participant: OlympicParticipant): void {
     const series: LineChartSerieData[] = [];
 
@@ -82,6 +98,13 @@ export class DetailComponent implements OnInit {
     this.lineChartDataList.push(new LineChartData(participant.country, series));
   }
 
+  /**
+   * Allows to display, for example, "2016" instead of "2 016"
+   * in the x axis of the line chart, representing years.
+   * 
+   * @param value x axis value
+   * @returns formatted x axis value
+   */
   xAxisTickFormatting(value: string) {
     return value;
   }
