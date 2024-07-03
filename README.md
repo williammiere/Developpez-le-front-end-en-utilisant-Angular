@@ -1,4 +1,6 @@
 # OlympicGamesStarter
+<img src="https://github.com/magicfinger96/Developpez-le-front-end-en-utilisant-Angular/assets/23461686/79703304-c38c-4561-9707-033ba20ae3e4" width="500">
+<img src="https://github.com/magicfinger96/Developpez-le-front-end-en-utilisant-Angular/assets/23461686/e7ae3dcb-507c-4273-ba8e-0bd16ccc22c4" width="500">
 
 ## Context
 The TV channel TéléSport would like to create a new web application to prepare the coming Olympic Games.
