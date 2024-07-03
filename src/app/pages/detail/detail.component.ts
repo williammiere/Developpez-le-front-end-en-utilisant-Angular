@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
-import {LineChartData } from 'src/app/core/models/LineChartData';
+import { LineChartData } from 'src/app/core/models/LineChartData';
 import { LineChartSerieData } from 'src/app/core/models/LineChartSerieData';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
@@ -50,7 +50,7 @@ export class DetailComponent implements OnInit {
     }
 
     const olympic: Olympic | undefined = olympics.find(
-      (olympic) => olympic.id == olympicId,
+      (olympic) => olympic.id == olympicId
     );
 
     if (olympic === undefined) {
@@ -74,7 +74,7 @@ export class DetailComponent implements OnInit {
 
     olympic.participations.forEach((participation) => {
       series.push(
-        new LineChartSerieData(participation.medalsCount, participation.year),
+        new LineChartSerieData(participation.medalsCount, participation.year)
       );
       this.xAxisTicks.push(participation.year);
     });

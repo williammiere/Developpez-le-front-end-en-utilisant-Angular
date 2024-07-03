@@ -27,10 +27,7 @@ export class HomeComponent implements OnInit {
   };
   pieChartDataList: PieChartData[] = [];
 
-  constructor(
-    private olympicService: OlympicService,
-    private router: Router,
-  ) {}
+  constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
@@ -52,8 +49,8 @@ export class HomeComponent implements OnInit {
         new PieChartData(
           olympic.country,
           this.olympicService.getMedalCountByOlympic(olympic),
-          { id: olympic.id },
-        ),
+          { id: olympic.id }
+        )
       );
     });
   }
