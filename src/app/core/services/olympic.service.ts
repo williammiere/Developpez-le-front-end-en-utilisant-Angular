@@ -36,15 +36,18 @@ export class OlympicService {
   /**
    * Get the observable which handle
    * a given participant.
-   * 
+   *
    * @param participantId id of the given participant
    * @returns the observable handling a participant
    */
-  getOlympicParticipant(participantId: string): Observable<OlympicParticipant | undefined> {
+  getOlympicParticipant(
+    participantId: string
+  ): Observable<OlympicParticipant | undefined> {
     return this.getOlympicParticipants().pipe(
-      map(participants => participants.find((participant) => participant.id == participantId)
-      )
-      ,filter(particant => particant != undefined)
+      map((participants) =>
+        participants.find((participant) => participant.id == participantId)
+      ),
+      filter((particant) => particant != undefined)
     );
   }
 

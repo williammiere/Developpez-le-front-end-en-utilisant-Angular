@@ -10,6 +10,13 @@
       [animations]="false"
       (select)="onSelect($event)"
     >
+      <ng-template #tooltipTemplate let-model="model">
+        <div class="chart-tooltip">
+          <span>{{ model.name }} </span><br />
+          <i class="fa-solid fa-award"></i>
+          <span> {{ model.value }}</span>
+        </div>
+      </ng-template>
     </ngx-charts-pie-chart>
   </div>
   } @else {
