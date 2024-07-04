@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.totalMedals();
+    this.totalMedalCountry();
   }
 
   ngOnDestroy(){
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
    * Subscribes to the OlympicService to get the Olympics data,
    * then maps it to the medals array.
    */
-  private totalMedals(): void{
+  private totalMedalCountry(): void{
    this.olympicServiceSubscription =  this.olympicService.getOlympics().subscribe( olympics=>{
      this.countriesLength = olympics.length;
     this.totalEntries = this.totalParticipations(olympics);
