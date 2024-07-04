@@ -1,0 +1,45 @@
+<div class="detail-container" *ngIf="lineChartData; else loading">
+  <div class="header">
+    <h2>{{countryName}}</h2>
+  </div>
+  <div class="info">
+    <div class="info-item">
+      <p>Number of entries</p>
+      <p>{{totalParticipations}}</p>
+    </div>
+    <div class="info-item">
+      <p>Total number medals</p>
+      <p>{{medalLenght}}</p>
+    </div>
+    <div class="info-item">
+      <p>Total number of athletes</p>
+      <p>{{totalAthletes}}</p>
+    </div>
+  </div>
+  <div class="chart">
+    <ngx-charts-line-chart
+    [results]="lineChartData"
+    [view]="[700, 400]"
+    [scheme]="colorScheme"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="false"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxisLabel]="'Year'"
+    [yAxisLabel]="'Count'"
+    [timeline]="true">
+  </ngx-charts-line-chart>
+  </div>
+
+</div>
+<ng-template #loading class="loading">
+  <div class="loading-container">
+    <div class="lds-ripple"><div></div><div></div></div>
+  </div>
+</ng-template>
+<div class="back-link">
+  <p>
+    <a routerLink="">Go back</a>
+  </p>
+</div>
