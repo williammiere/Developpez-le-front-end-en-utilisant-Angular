@@ -12,9 +12,8 @@
     >
       <ng-template #tooltipTemplate let-model="model">
         <div class="chart-tooltip">
-          <span>{{ model.name }} </span><br />
-          <i class="fa-solid fa-award"></i>
-          <span> {{ model.value }}</span>
+          <span>{{ model.name }}</span>
+          <span><i class="fa-solid fa-award"></i> {{ model.value }}</span>
         </div>
       </ng-template>
     </ngx-charts-pie-chart>
