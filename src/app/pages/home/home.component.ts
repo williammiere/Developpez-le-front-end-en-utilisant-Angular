@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Color, ScaleType } from '@swimlane/ngx-charts';
-import { Observable, of, Subscription } from 'rxjs';
+import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { map, Observable, of } from 'rxjs';
+import { HeaderComponent } from 'src/app/components/header/header.component';
+import { StatsLabelsBarComponent } from 'src/app/components/stats-labels-bar/stats-labels-bar.component';
+import { HomePageData } from 'src/app/core/models/HomePageData';
 import { OlympicParticipant } from 'src/app/core/models/OlympicParticipant';
 import { PieChartData } from 'src/app/core/models/PieChartData';
+import { StatsLabel } from 'src/app/core/models/StatsLabel';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 /**
@@ -11,14 +15,17 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
  */
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [
+    StatsLabelsBarComponent,
+    NgxChartsModule,
+    HeaderComponent
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  participants$: Observable<OlympicParticipant[]> = of([]);
-  participantsSubscription!: Subscription;
-  olympicCount: number = 0;
-  participantCount: number = 0;
+  homePageData$: Observable<HomePageData> = of();
 
   // Chart parameters
   showLabels: boolean = true;
@@ -28,38 +35,45 @@ export class HomeComponent implements OnInit {
     selectable: true,
     name: 'Customer Usage',
   };
-  pieChartDataList: PieChartData[] = [];
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.participants$ = this.olympicService.getOlympicParticipants();
-    this.participantsSubscription = this.participants$.subscribe((participants) => {
-      this.onParticipantsChanged(participants);
-    });
+    this.homePageData$ = this.getHomePageData();
   }
 
   /**
-   * Called when the participants are updated.
-   * 
-   * @param participants participating country
+   * Get the home page data.
+   * It contains the stats label data and the chart data.
+   *
+   * @returns the home page data.
    */
-  onParticipantsChanged(participants: OlympicParticipant[]) {
-    this.participantCount = participants.length;
-    this.olympicCount = this.olympicService.getOlympicCount(participants);
-    this.fillChart(participants);
+  getHomePageData(): Observable<HomePageData> {
+    return this.olympicService.getOlympicParticipants().pipe(
+      map((participants) => {
+        const olympicCount = this.olympicService.getOlympicCount(participants);
+
+        const statsLabels: StatsLabel[] = [];
+        statsLabels.push(new StatsLabel('Number of JOs', olympicCount));
+        statsLabels.push(
+          new StatsLabel('Number of countries', participants.length)
+        );
+
+        return new HomePageData(statsLabels, this.fillChart(participants));
+      })
+    );
   }
 
   /**
    * Fills the pie chart with the participating countries data.
-   * This chart shows the earned medal count distribution for each country. 
-   * 
+   * This chart shows the earned medal count distribution for each country.
+   *
    * @param participants participating countries
    */
-  fillChart(participants: OlympicParticipant[]) {
-    this.pieChartDataList = [];
+  fillChart(participants: OlympicParticipant[]): PieChartData[] {
+    let pieChartDataList: PieChartData[] = [];
     participants.forEach((olympic) => {
-      this.pieChartDataList.push(
+      pieChartDataList.push(
         new PieChartData(
           olympic.country,
           this.olympicService.getMedalCount(olympic),
@@ -67,18 +81,15 @@ export class HomeComponent implements OnInit {
         )
       );
     });
+    return pieChartDataList;
   }
 
   /**
    * Called when clicking on a pie chart slice.
-   * 
+   *
    * @param data data of the related slice.
    */
   onSelect(data: PieChartData): void {
     this.router.navigateByUrl(`detail/${data.extra['id']}`);
-  }
-
-  ngOnDestroy(): void {
-    this.participantsSubscription.unsubscribe();
   }
 }

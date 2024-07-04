@@ -1,5 +1,3 @@
-$primary-color: #04838f;
-
 * {
   font-family: Arial, sans-serif;
   letter-spacing: 1.5px;
@@ -7,42 +5,6 @@ $primary-color: #04838f;
 
 .pie-label {
   font-size: 20px !important;
-}
-
-.head-title {
-  background-color: $primary-color;
-  display: inline-block;
-  color: white;
-  font-size: 24px;
-  border-radius: 7px;
-  padding: 5px 10px 5px 10px;
-}
-
-.information {
-  color: black;
-  font-size: 16px;
-  border-radius: 7px;
-  border: 2px solid $primary-color;
-  padding: 10px 10px 5px 10px;
-
-  p {
-    margin: 0px;
-  }
-
-  p:first-child {
-    margin-bottom: 2px;
-  }
-
-  p:last-child {
-    font-weight: 800;
-  }
-}
-
-.information-wrapper {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  width: 100%;
 }
 
 .wrapper {

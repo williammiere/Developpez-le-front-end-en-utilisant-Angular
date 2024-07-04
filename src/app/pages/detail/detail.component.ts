@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { map, Observable, of} from 'rxjs';
+import { HeaderComponent } from 'src/app/components/header/header.component';
+import { StatsLabelsBarComponent } from 'src/app/components/stats-labels-bar/stats-labels-bar.component';
+import { DetailPageData } from 'src/app/core/models/DetailPageData';
 import { LineChartData } from 'src/app/core/models/LineChartData';
 import { LineChartSerieData } from 'src/app/core/models/LineChartSerieData';
 import { OlympicParticipant } from 'src/app/core/models/OlympicParticipant';
+import { StatsLabel } from 'src/app/core/models/StatsLabel';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 /**
@@ -11,12 +16,18 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
  */
 @Component({
   selector: 'app-detail',
+  standalone: true,
+  imports: [
+    NgxChartsModule,
+    StatsLabelsBarComponent,
+    RouterLink,
+    HeaderComponent
+  ],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss',
 })
 export class DetailComponent implements OnInit {
-  participants$: Observable<OlympicParticipant[]> = of([]);
-  participantsSubscription!: Subscription;
+  detailPageData$: Observable<DetailPageData> = of();
 
   countryName: string = '';
   entryCount: number = 0;
@@ -31,7 +42,6 @@ export class DetailComponent implements OnInit {
   xAxisLabel: string = 'Dates';
   yAxisLabel: string = 'Medal count';
   xAxisTicks: string[] = [];
-  lineChartDataList: LineChartData[] = [];
 
   constructor(
     private olympicService: OlympicService,
@@ -41,52 +51,59 @@ export class DetailComponent implements OnInit {
 
   ngOnInit(): void {
     const participantId: string = this.route.snapshot.params['id'];
-    this.participants$ = this.olympicService.getOlympicParticipants();
-    this.participantsSubscription = this.participants$.subscribe((participants) => {
-      this.onParticipantsChanged(participants, participantId);
-    });
+    this.detailPageData$ = this.getParticipantDetail(participantId);
   }
 
   /**
-   * Called when the participants are updated.
-   * 
-   * @param participants updated participants.
-   * @param participantId id of the displayed participant.
+   * Get the home page data.
+   * It contains the stats label data and the chart data.
+   *
+   * @returns the home page data.
    */
-  onParticipantsChanged(participants: OlympicParticipant[], participantId: string): void {
-    if (participants.length == 0) {
-      return;
-    }
+  getParticipantDetail(participantId: string): Observable<any> {
+    return this.olympicService.getOlympicParticipant(participantId).pipe(
+      map((participant) => {
+        const statsLabels: StatsLabel[] = [];
+        statsLabels.push(
+          new StatsLabel(
+            'Number of entries',
+            participant!.participations.length
+          )
+        );
+        statsLabels.push(
+          new StatsLabel(
+            'Total number medals',
+            this.olympicService.getMedalCount(participant!)
+          )
+        );
+        statsLabels.push(
+          new StatsLabel(
+            'Total number of athletes',
+            this.olympicService.getAthleteCount(participant!)
+          )
+        );
 
-    const participant: OlympicParticipant | undefined = participants.find(
-      (participant) => participant.id == participantId
+        return new DetailPageData(
+          participant!.country,
+          statsLabels,
+          this.fillChart(participant!)
+        );
+      })
     );
-
-    if (participant === undefined) {
-      this.router.navigateByUrl('**');
-      return;
-    }
-
-    this.countryName = participant.country;
-    this.entryCount = participant.participations.length;
-    this.medalCount = this.olympicService.getMedalCount(participant);
-    this.athleteCount = this.olympicService.getAthleteCount(participant);
-
-    this.fillChart(participant);
   }
 
   /**
    * Fills the line chart with the data of a participant.
    * This chart represents the medal count of the country through the years.
    * Only years when there was a participation are displayed.
-   * 
+   *
    * @param participant country represented on the chart.
+   * @returns the line chart data
    */
-  fillChart(participant: OlympicParticipant): void {
+  fillChart(participant: OlympicParticipant): LineChartData[] {
+    let lineChartDataList: LineChartData[] = [];
     const series: LineChartSerieData[] = [];
-
     this.xAxisTicks = [];
-    this.lineChartDataList = [];
 
     participant.participations.forEach((participation) => {
       series.push(
@@ -95,21 +112,18 @@ export class DetailComponent implements OnInit {
       this.xAxisTicks.push(participation.year);
     });
 
-    this.lineChartDataList.push(new LineChartData(participant.country, series));
+    lineChartDataList.push(new LineChartData(participant.country, series));
+    return lineChartDataList;
   }
 
   /**
    * Allows to display, for example, "2016" instead of "2 016"
    * in the x axis of the line chart, representing years.
-   * 
+   *
    * @param value x axis value
    * @returns formatted x axis value
    */
   xAxisTickFormatting(value: string) {
     return value;
-  }
-
-  ngOnDestroy(): void {
-    this.participantsSubscription.unsubscribe();
   }
 }

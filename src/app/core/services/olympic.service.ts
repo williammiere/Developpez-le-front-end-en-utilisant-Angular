@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, filter, map, tap } from 'rxjs/operators';
 import { OlympicParticipant } from '../models/OlympicParticipant';
 
 /**
@@ -16,7 +16,7 @@ export class OlympicService {
 
   constructor(private http: HttpClient) {}
 
-  loadInitialData() {
+  loadInitialData(): Observable<OlympicParticipant[]> {
     return this.http.get<OlympicParticipant[]>(this.olympicUrl).pipe(
       tap((value) => this.olympicParticipants$.next(value)),
       catchError((error, caught) => {
@@ -31,6 +31,21 @@ export class OlympicService {
 
   getOlympicParticipants(): Observable<OlympicParticipant[]> {
     return this.olympicParticipants$.asObservable();
+  }
+
+  /**
+   * Get the observable which handle
+   * a given participant.
+   * 
+   * @param participantId id of the given participant
+   * @returns the observable handling a participant
+   */
+  getOlympicParticipant(participantId: string): Observable<OlympicParticipant | undefined> {
+    return this.getOlympicParticipants().pipe(
+      map(participants => participants.find((participant) => participant.id == participantId)
+      )
+      ,filter(particant => particant != undefined)
+    );
   }
 
   /**

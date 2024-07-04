@@ -1,35 +1,23 @@
 <div class="wrapper">
-  <a class="head-title left-button" routerLink="">Back</a>
-  <div class="head-title">{{ countryName }}</div>
-  <br /><br />
-  @if ((participants$ | async)?.length != 0) {
-    <div class="information-wrapper">
-      <div class="information">
-        <p>Number of entries</p>
-        <p>{{ entryCount }}</p>
-      </div>
-      <div class="information">
-        <p>Total number medals</p>
-        <p>{{ medalCount }}</p>
-      </div>
-      <div class="information">
-        <p>Total number of athletes</p>
-        <p>{{ athleteCount }}</p>
-      </div>
-    </div>
-    <div class="graph-container">
-      <ngx-charts-line-chart
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisTicks]="xAxisTicks"
-        [xAxisTickFormatting]="xAxisTickFormatting"
-        [xAxis]="xAxis"
-        [yAxis]="yAxis"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [results]="lineChartDataList"
-      >
-      </ngx-charts-line-chart>
-    </div>
+  @if ((detailPageData$ | async); as detail) {
+  <app-header [canBack]="true" [title]="detail.countryName" />
+  <app-stats-labels-bar [statsLabels]="detail.statsLabels" />
+  <div class="graph-container">
+    <ngx-charts-line-chart
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisTicks]="xAxisTicks"
+      [xAxisTickFormatting]="xAxisTickFormatting"
+      [xAxis]="xAxis"
+      [yAxis]="yAxis"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [results]="detail.lineChartData"
+    >
+    </ngx-charts-line-chart>
+  </div>
+  } @else {
+    <app-header [canBack]="true"/>
+    <p>No data available</p>
   }
 </div>

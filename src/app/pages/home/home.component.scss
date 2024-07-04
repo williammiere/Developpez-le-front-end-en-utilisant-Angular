@@ -1,19 +1,10 @@
 @media screen and (max-width: 432px) {
-  .information-wrapper {
-    flex-direction: column;
-    gap: 10px;
-  }
-
   .graph-container {
     height: 200px;
   }
 }
 
 @media screen and (min-width: 433px) {
-  .information-wrapper {
-    gap: 50px;
-  }
-
   .graph-container {
     height: 500px;
   }

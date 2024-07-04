@@ -1,26 +1,18 @@
 <div class="wrapper">
-  <div class="head-title">Medals per Country</div>
-  <br /><br />
-  @if ((participants$ | async)?.length != 0) {
-    <div class="information-wrapper">
-      <div class="information">
-        <p>Number of JOs</p>
-        <p>{{ olympicCount }}</p>
-      </div>
-      <div class="information">
-        <p>Number of countries</p>
-        <p>{{ participantCount }}</p>
-      </div>
-    </div>
-    <div class="graph-container">
-      <ngx-charts-pie-chart
-        [scheme]="colorScheme"
-        [results]="pieChartDataList"
-        [labels]="showLabels"
-        [animations]="false"
-        (select)="onSelect($event)"
-      >
-      </ngx-charts-pie-chart>
-    </div>
+  <app-header [canBack]="false" [title]="'Medals per Country'" />
+  @if ((homePageData$ | async); as data) {
+  <app-stats-labels-bar [statsLabels]="data.statsLabels" />
+  <div class="graph-container">
+    <ngx-charts-pie-chart
+      [scheme]="colorScheme"
+      [results]="data.pieChartDataList"
+      [labels]="showLabels"
+      [animations]="false"
+      (select)="onSelect($event)"
+    >
+    </ngx-charts-pie-chart>
+  </div>
+  } @else {
+  <p>No data available</p>
   }
 </div>
