@@ -22,6 +22,9 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Architecture
 
 The architecture includes (in addition to the default angular architecture) the following:
+- `components`:
+  - `header` folder: handles the page header: title (and back button).
+  - `stats-labels-bar` folder: handles the bar of statistics labels
 - `pages` folder: contains components used for routing.
   - `detail` folder: contains the component of the Detail page.
   - `home` folder: contains the component of the Home page.
@@ -34,3 +37,6 @@ The architecture includes (in addition to the default angular architecture) the 
     - `OlympicParticipant.ts`: represents a country that has participated to Olympic Games.
     - `Participation.ts`: represents the participation of a country to the Olympic Games.
     - `PieChartData.ts`: used to fill the pie chart in the Home Page.
+    - `StatsLabel.ts`: represents statistics label data.
+    - `HomePageData.ts`: represents home page data.
+    - `DetailPageData.ts`: represents detail page data.
