@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Olympic} from '../models/Olympic';
 import { Participation } from '../models/Participation';
-import { Medal } from '../models/medal';
 
 @Injectable({
   providedIn: 'root',

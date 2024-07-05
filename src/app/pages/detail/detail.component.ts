@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Color, ScaleType, id } from '@swimlane/ngx-charts';
-import { Observable, Subscription, map, switchMap } from 'rxjs';
+import { Color, ScaleType,} from '@swimlane/ngx-charts';
+import { Observable, Subscription,} from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { Participation } from 'src/app/core/models/Participation';
+import { StatCountry } from 'src/app/core/models/statcounrty';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class DetailComponent implements OnInit {
 
   countryId: number | null = null;
   countryDetails$: Observable<Olympic | undefined> | undefined;
-  lineChartData!: Olympic[];
+  lineChartData!: StatCountry[];
   totalParticipations: number = 0;
   totalAthletes!: number;
   medalLenght!: number;
@@ -59,8 +60,8 @@ export class DetailComponent implements OnInit {
    * @param participations list participations 
    * @returns an array of data series for the chart. 
    */
-  private transformToLineChartData(participations: Participation[]): any[] {
-    const medalsSeries = {
+  private transformToLineChartData(participations: Participation[]): StatCountry[] {
+    const medalsSeries: StatCountry = {
       name: 'Medals Count',
       series: participations.map((participation: Participation) => ({
         name: participation.year.toString(),
@@ -68,7 +69,7 @@ export class DetailComponent implements OnInit {
       }))
     };
       
-    const athletesSeries = {
+    const athletesSeries: StatCountry = {
       name: 'Athlete Count',
       series: participations.map((participation: Participation) => ({
         name: participation.year.toString(),
