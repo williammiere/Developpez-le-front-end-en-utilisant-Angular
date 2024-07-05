@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+  "id": 1,
     "country": "Italy",
     "participations": [
       {
@@ -9,7 +9,7 @@
         "city": "Londres",
         "medalsCount": 28,
         "athleteCount": 372
-      },
+      },  
       {
         "id": 2,
         "year": 2016,
