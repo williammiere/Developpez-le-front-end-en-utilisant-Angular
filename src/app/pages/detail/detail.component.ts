@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { map, Observable, of} from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { StatsLabelsBarComponent } from 'src/app/components/stats-labels-bar/stats-labels-bar.component';
 import { DetailPageData } from 'src/app/core/models/DetailPageData';
