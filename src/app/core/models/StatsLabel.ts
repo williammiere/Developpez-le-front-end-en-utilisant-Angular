@@ -1,6 +1,7 @@
 /**
  * Represents a statistic label
  */
-export class StatsLabel {
-  constructor(public name: string, public value: number) {}
+export interface StatsLabel {
+  name: string;
+  value: number;
 }

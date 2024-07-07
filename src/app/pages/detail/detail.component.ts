@@ -65,29 +65,25 @@ export class DetailComponent implements OnInit {
       map((participant) => {
         const statsLabels: StatsLabel[] = [];
         statsLabels.push(
-          new StatsLabel(
-            'Number of entries',
-            participant!.participations.length
-          )
-        );
-        statsLabels.push(
-          new StatsLabel(
-            'Total number medals',
-            this.olympicService.getMedalCount(participant!)
-          )
-        );
-        statsLabels.push(
-          new StatsLabel(
-            'Total number of athletes',
-            this.olympicService.getAthleteCount(participant!)
-          )
+          {
+            name: 'Number of entries',
+            value: participant!.participations.length,
+          },
+          {
+            name: 'Total number medals',
+            value: this.olympicService.getMedalCount(participant!),
+          },
+          {
+            name: 'Total number of athletes',
+            value: this.olympicService.getAthleteCount(participant!),
+          }
         );
 
-        return new DetailPageData(
-          participant!.country,
-          statsLabels,
-          this.fillChart(participant!)
-        );
+        return {
+          countryName: participant!.country,
+          statsLabels: statsLabels,
+          lineChartData: this.fillChart(participant!),
+        };
       })
     );
   }
@@ -106,13 +102,17 @@ export class DetailComponent implements OnInit {
     this.xAxisTicks = [];
 
     participant.participations.forEach((participation) => {
-      series.push(
-        new LineChartSerieData(participation.medalsCount, participation.year)
-      );
+      series.push({
+        value: participation.medalsCount,
+        name: participation.year,
+      });
       this.xAxisTicks.push(participation.year);
     });
 
-    lineChartDataList.push(new LineChartData(participant.country, series));
+    lineChartDataList.push({
+      name: participant.country,
+      series: series,
+    });
     return lineChartDataList;
   }
 

@@ -50,12 +50,21 @@ export class HomeComponent implements OnInit {
         const olympicCount = this.olympicService.getOlympicCount(participants);
 
         const statsLabels: StatsLabel[] = [];
-        statsLabels.push(new StatsLabel('Number of JOs', olympicCount));
         statsLabels.push(
-          new StatsLabel('Number of countries', participants.length)
+          {
+            name: 'Number of JOs',
+            value: olympicCount,
+          },
+          {
+            name: 'Number of countries',
+            value: participants.length,
+          }
         );
 
-        return new HomePageData(statsLabels, this.fillChart(participants));
+        return {
+          statsLabels: statsLabels,
+          pieChartDataList: this.fillChart(participants),
+        };
       })
     );
   }
@@ -69,13 +78,11 @@ export class HomeComponent implements OnInit {
   fillChart(participants: OlympicParticipant[]): PieChartData[] {
     let pieChartDataList: PieChartData[] = [];
     participants.forEach((olympic) => {
-      pieChartDataList.push(
-        new PieChartData(
-          olympic.country,
-          this.olympicService.getMedalCount(olympic),
-          { id: olympic.id }
-        )
-      );
+      pieChartDataList.push({
+        name: olympic.country,
+        value: this.olympicService.getMedalCount(olympic),
+        extra: { id: olympic.id },
+      });
     });
     return pieChartDataList;
   }
