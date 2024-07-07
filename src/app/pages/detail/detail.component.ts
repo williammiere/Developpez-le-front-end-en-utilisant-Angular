@@ -55,9 +55,10 @@ export class DetailComponent implements OnInit {
   }
 
   /**
-   * Get the home page data.
-   * It contains the stats label data and the chart data.
+   * Get the detail page data of a participant.
+   * It contains the country name, stats label data and the chart data.
    *
+   * @param participantId id of the participant
    * @returns the home page data.
    */
   getParticipantDetail(participantId: string): Observable<DetailPageData> {
