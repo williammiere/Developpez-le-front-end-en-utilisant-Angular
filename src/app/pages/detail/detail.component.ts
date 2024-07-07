@@ -60,7 +60,7 @@ export class DetailComponent implements OnInit {
    *
    * @returns the home page data.
    */
-  getParticipantDetail(participantId: string): Observable<any> {
+  getParticipantDetail(participantId: string): Observable<DetailPageData> {
     return this.olympicService.getOlympicParticipant(participantId).pipe(
       map((participant) => {
         const statsLabels: StatsLabel[] = [];
