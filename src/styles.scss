@@ -63,22 +63,7 @@ ngx-charts-pie-chart svg {
   color: white !important;
 }
 
-.chart-container {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-ngx-charts-pie-chart svg {
-  width: 100% !important;
-  height: auto !important;
-}
-
-.ngx-charts-tooltip-content {
-  background-color: #418791 !important;
-  color: white !important;
-}
-
+/* Media queries for additional responsiveness */
 @media (max-width: 767.98px) {
   .stats-container {
     flex-direction: column;
