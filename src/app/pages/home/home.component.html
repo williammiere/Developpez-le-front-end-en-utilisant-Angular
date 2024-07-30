@@ -1,3 +1,43 @@
-<h2>Olympic games app</h2>
-<hr />
-<p>{{ (olympics$ | async)?.length }} data loaded</p>
+
+<div class="center-content">
+  <button class="button-title">Medals per Country</button>
+  <div class="subtitle-container">
+
+  <button class="button-subtitle">
+    <div class="subtitle-text">
+      Number of JOs
+    </div>
+    <div class="additional-text">
+      {{numberOfJOs}}
+    </div>
+  </button>
+  <button class="button-subtitle">
+    <div class="subtitle-text">
+      Number of countries
+    </div>
+    <div class="additional-text">
+      12
+    </div>
+  </button>
+  </div>
+<!--Chart-->
+  <div *ngIf="countryMedals.length; else noDataTemplate">
+    <ngx-charts-pie-chart
+      [results]="countryMedals"
+    >
+
+    </ngx-charts-pie-chart>
+  </div>
+  <ng-template #noDataTemplate>
+    <div class="error-message">
+      <p>Aucune donnée disponible pour les médailles olympiques.</p>
+    </div>
+  </ng-template>
+</div>
+
+
+
+
+
+
+
