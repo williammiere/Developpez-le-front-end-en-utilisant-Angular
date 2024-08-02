@@ -8,13 +8,15 @@ import {RouterModule, RouterOutlet} from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {OlympicService} from "./core/services/olympic.service";
 import {JsonPipe} from "@angular/common";
-import {BarChartModule, PieChartModule} from "@swimlane/ngx-charts";
-import {AppRoutingModule} from "./app-routing.module"; // Ensure this is imported
+import {BarChartModule, NgxChartsModule, PieChartModule} from "@swimlane/ngx-charts";
+import {AppRoutingModule} from "./app-routing.module";
+import {CountryDetailsComponent} from "./pages/country-details/country-details.component"; // Ensure this is imported
 
 
 @NgModule({
   declarations: [AppComponent,HomeComponent, NotFoundComponent],
-  imports: [BrowserModule, AppRoutingModule,BrowserAnimationsModule,RouterModule, RouterOutlet,JsonPipe, PieChartModule,BarChartModule,HttpClientModule],
+  imports: [BrowserModule, AppRoutingModule,BrowserAnimationsModule,RouterModule, RouterOutlet,
+    JsonPipe, PieChartModule,BarChartModule,HttpClientModule,CountryDetailsComponent,NgxChartsModule],
   providers: [OlympicService],
   bootstrap: [AppComponent],
 })

@@ -1,1 +1,144 @@
 /* You can add global styles to this file, and also import other style files */
+// Variables SCSS pour personnaliser facilement les styles
+$button-title-background-color: #04838F; // Turquoise
+$button-title-font-color: white;
+$button-subtitle-background-color: #f2f2f2; // Light gray background for subtitle
+$button-subtitle-font-color: gray;
+$button-subtitle-additional-text-color: black; // Dark gray for additional text
+$button-subtitle-font-size: 18px;
+
+
+$button-font-size: 32px;
+
+$button-padding: 10px 20px;
+$button-border-radius: 5px;
+$button-font-family: sans-serif, 'Arial', sans-serif;
+
+// Styles pour centrer le contenu sur la page
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  // height: 1500px;
+  padding-top: 50px;
+
+}
+
+
+// Styles pour le bouton principal (titre)
+.button-title {
+  background-color: $button-title-background-color;
+  color: $button-title-font-color;
+  font-size: $button-font-size;
+  padding: $button-padding;
+  border: none;
+  border-radius: $button-border-radius;
+  font-family: $button-font-family;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+
+  &:hover {
+    background-color: darken($button-title-background-color, 10%);
+  }
+}
+
+// Styles pour le bouton sous-titre
+.button-subtitle {
+  background-color: $button-subtitle-background-color;
+  color: $button-subtitle-font-color;
+  font-size: $button-subtitle-font-size;
+  padding: $button-padding;
+  border: 2px solid $button-title-background-color;
+  border-radius: $button-border-radius;
+  font-family: $button-font-family;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  position: relative;
+
+  &:hover {
+    background-color: lighten($button-subtitle-background-color, 10%);
+  }
+
+  .additional-text {
+    color: $button-subtitle-additional-text-color;
+    font-size: 0.85em;
+    bottom: 5px;
+    font-weight: bold;
+  }
+}
+.subtitle-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px; // Espace entre les boutons
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.subtitle-text {
+  margin-bottom: 5px; // Ajustez l'espacement si nécessaire
+}
+.button-back {
+  background-color: #04838F; /* Couleur de fond principale */
+  color: #f2f2f2; /* Couleur du texte */
+  font-size: 14px; /* Taille de la police */
+  padding: 10px 10px; /* Espacement intérieur */
+  border: none; /* Sans bordure */
+  border-radius: 5px; /* Coins arrondis */
+  font-family: Arial, sans-serif; /* Police sans serif */
+  cursor: pointer; /* Curseur pointer pour le clic */
+  margin-bottom: 10px; /* Marge en bas */
+  display: inline-block; /* Affichage en ligne */
+  text-align: center; /* Alignement du texte */
+  text-decoration: none; /* Sans décoration */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Effet de transition */
+}
+
+.button-back:hover {
+  background-color: #026a7f; /* Couleur de fond au survol (un bleu-vert plus foncé) */
+  transform: scale(1.05); /* Agrandir légèrement au survol */
+}
+
+.button-back:active {
+  background-color: #024d57; /* Couleur de fond lors du clic (encore plus foncé) */
+}
+@media (max-width: 768px) {
+  .button-title {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .button-subtitle {
+    font-size: 18px;
+    padding: 8px;
+  }
+
+  .subtitle-container {
+    flex-direction: column;
+    gap: 20px; // Réduit l'espace entre les boutons sur les petits écrans
+  }
+
+  .center-content {
+    padding-top: 20px; // Réduit le padding pour les petits écrans
+  }
+}
+
+@media (max-width: 480px) {
+  .button-title {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .button-subtitle {
+    font-size: 16px;
+    padding: 6px;
+  }
+}

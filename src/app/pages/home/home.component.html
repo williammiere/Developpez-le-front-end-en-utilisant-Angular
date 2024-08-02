@@ -16,24 +16,29 @@
       Number of countries
     </div>
     <div class="additional-text">
-      12
+      {{numberOfCountries}}
     </div>
   </button>
   </div>
-<!--Chart-->
-  <div *ngIf="countryMedals.length; else noDataTemplate">
-    <ngx-charts-pie-chart
-      [results]="countryMedals"
-    >
 
-    </ngx-charts-pie-chart>
-  </div>
-  <ng-template #noDataTemplate>
-    <div class="error-message">
-      <p>Aucune donnée disponible pour les médailles olympiques.</p>
-    </div>
-  </ng-template>
 </div>
+<!--Chart-->
+<div *ngIf="countryMedals.length; else noDataTemplate">
+  <ngx-charts-pie-chart
+    [results]="countryMedals"
+    [labels]="true"
+    (select)="onViewCountry($event)"
+
+
+  >
+
+  </ngx-charts-pie-chart>
+</div>
+<ng-template #noDataTemplate>
+  <div class="error-message">
+    <p>Aucune donnée disponible pour les médailles olympiques.</p>
+  </div>
+</ng-template>
 
 
 

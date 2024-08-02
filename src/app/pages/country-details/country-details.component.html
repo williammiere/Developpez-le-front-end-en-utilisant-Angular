@@ -1,0 +1,65 @@
+
+<div class="center-content">
+  <button *ngIf="olympic"  class="button-title">{{olympic.country}}</button>
+  <div class="subtitle-container">
+
+    <button class="button-subtitle">
+      <div class="subtitle-text">
+        Number of entries
+      </div>
+      <div class="additional-text">
+        {{numberOfEntries}}
+      </div>
+    </button>
+    <button class="button-subtitle">
+      <div class="subtitle-text">
+        Total number of medals
+      </div>
+      <div *ngIf="olympic" class="additional-text">
+         {{totalNumberOfMedals}}
+      </div>
+    </button>
+    <button class="button-subtitle">
+      <div class="subtitle-text">
+        Total number of athletes
+      </div>
+      <div *ngIf="olympic" class="additional-text">
+        {{totalNumberOfAthletes}}
+      </div>
+    </button>
+  </div>
+
+</div>
+<!--Chart-->
+<div *ngIf="olympic; else noDataTemplate">
+  <ngx-charts-line-chart
+
+  [scheme]="colorScheme"
+  [legend]="legend"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxis]="xAxis"
+  [yAxis]="yAxis"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
+  [timeline]="timeline"
+  [results]="medalsPerYear"
+
+  >
+</ngx-charts-line-chart>
+</div>
+<ng-template #noDataTemplate>
+  <div class="error-message">
+    <p>Aucune donnée disponible pour le pays séléctionné.</p>
+  </div>
+</ng-template>
+<button (click)="onGoBackToDashboard()" class="button-back">Back</button>
+
+
+
+
+
+
+
+
+
