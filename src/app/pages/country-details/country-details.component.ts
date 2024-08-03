@@ -4,6 +4,7 @@ import { OlympicService } from "../../core/services/olympic.service";
 import { Olympic } from "../../core/models/Olympic";
 import { NgIf } from "@angular/common";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { partition } from 'rxjs';
 
 @Component({
   selector: 'app-country-details',
@@ -16,12 +17,20 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
   styleUrl: './country-details.component.scss'
 })
 export class CountryDetailsComponent implements OnInit {
-
+  onDeactivate($event: any) {
+    throw new Error('Method not implemented.');
+  }
+  onActivate($event: any) {
+    throw new Error('Method not implemented.');
+  }
+  onSelect($event: any): void {
+    throw new Error('Method not implemented.');
+  }
   olympic!: Olympic;
   medalsPerYear: { "name": string, "series": { "name": string, "value": number }[] }[] = [];
-  numberOfEntries!: number;
-  totalNumberOfMedals!: number;
-  totalNumberOfAthletes!: number;
+  numberOfEntries!:number;
+  totalNumberOfMedals!:number;
+  totalNumberOfAthletes!:number;
 
   // options
   legend: boolean = false;
@@ -47,22 +56,9 @@ export class CountryDetailsComponent implements OnInit {
     this.totalNumberOfMedals = 0;
 
   }
-  /**
-   * Initializes the component and loads Olympic data for a specific country.
-   *
-   * This method is triggered when the component is initialized. It performs the following tasks:
-   * 1. Retrieves the Olympic ID from the route parameters.
-   * 2. Fetches the list of all Olympics using the OlympicService.
-   * 3. Finds and assigns the Olympic details for the specific country based on the retrieved Olympic ID.
-   * 4. If Olympic data is found, it:
-   *    - Retrieves participation data for the country.
-   *    - Maps the participation data to a format suitable for displaying medals per year.
-   *    - Updates the total number of entries, medals, and athletes based on the retrieved data.
-   *
-   * @returns {void} No return value.
-   */
-  ngOnInit(): void {
 
+  ngOnInit(): void {
+    
     const olympicId = this.route.snapshot.params['id'];
 
     this.olympicService.getOlympics().subscribe(
@@ -84,7 +80,7 @@ export class CountryDetailsComponent implements OnInit {
                         "value": p.medalsCount
                       });//end push
                       //this.numberOfEntries ++;
-
+                      
 
                     });//end foreach participations
 
@@ -110,16 +106,8 @@ export class CountryDetailsComponent implements OnInit {
 
   }
 
-  /**
-   * Navigates the user back to the dashboard.
-   *
-   * This method uses Angular's Router to navigate back to the
-   * dashboard or a specified route. The exact route is determined
-   * by the URL provided.
-   *
-   * @returns {void} No return value.
-   */
-  onGoBackToDashboard(): void {
+
+  onGoBackToDashboard() {
     this.router.navigateByUrl(``);
 
   }
