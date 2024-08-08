@@ -67,10 +67,10 @@ loadInitialData(): Observable<void> {
    * @returns {Observable<Olympic>} An observable emitting the `Olympic` object corresponding
    * to the specified country. If no matching Olympic data is found, an error observable is returned.
    */
-  getOlympicByCountry(country: string): Observable<Olympic> {
-    const foundOlympic = this.getOlympicsValue().find((olympic) => olympic.country === country);
+  getOlympicByCountryId(countryId: number): Observable<Olympic> {
+    const foundOlympic = this.getOlympicsValue().find((olympic) => olympic.id == countryId);
     if (!foundOlympic) {
-      return throwError(() => new Error(`Could not find Olympic with country ${country}`));
+      return throwError(() => new Error(`Could not find Olympic with country ${countryId}`));
     }
     return of(foundOlympic);
   }
@@ -87,12 +87,12 @@ loadInitialData(): Observable<void> {
    * @returns {Observable<Participation[]>} An observable emitting an array of `Participation` objects.
    * If an error occurs, the observable will emit an error indicating the failure to retrieve the data.
    */
-  getParticipationsByCountry(country: string): Observable<Participation[]> {
-    return this.getOlympicByCountry(country).pipe(
+  getParticipationsByCountryId(countryId: number): Observable<Participation[]> {
+    return this.getOlympicByCountryId(countryId).pipe(
       map((olympic) => olympic.participations),
       catchError((error) => {
         console.error(error);
-        return throwError(() => new Error(`Failed to get participations for country ${country}`));
+        return throwError(() => new Error(`Failed to get participations for country ${countryId}`));
       })
     );
   }
@@ -125,6 +125,9 @@ loadInitialData(): Observable<void> {
    * @returns {number} The total number of medals across all participations for the given Olympic entry.
    */
   getTotalMedalsPerOlympic(olympic: Olympic): number {
+    if (!olympic || !olympic.participations) {
+      return 0;
+    }
     return olympic.participations.reduce((total, participation) => total + participation.medalsCount, 0);
   }
 
@@ -138,6 +141,9 @@ loadInitialData(): Observable<void> {
    * @returns {number} The total number of athletes across all participations for the given Olympic entry.
    */
   getTotalAthletesPerOlympic(olympic: Olympic): number {
+    if (!olympic || !olympic.participations) {
+      return 0;
+    }
     return olympic.participations.reduce((total, participation) => total + participation.athleteCount, 0);
   }
   /**
@@ -149,13 +155,16 @@ loadInitialData(): Observable<void> {
    * @returns {number} The number of unique years present in the participation data of all Olympic entries.
    */
   getNumberOfJOs(): number {
-    const olympics = this.olympics$.getValue();
     const uniqueYears = new Set<number>();
-    olympics.forEach((olympic) => {
+    this.getOlympics().subscribe(
+      (olympics) =>{
+         olympics.forEach((olympic) => {
       olympic.participations.forEach((participation) => {
         uniqueYears.add(participation.year);
       });
     });
+    })
+ 
     return uniqueYears.size;
   }
   /**

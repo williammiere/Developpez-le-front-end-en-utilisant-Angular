@@ -1,23 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { OlympicService } from "../../core/services/olympic.service";
 import { Olympic } from "../../core/models/Olympic";
-import { NgIf } from "@angular/common";
-import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-country-details',
-  standalone: true,
-  imports: [
-    NgIf,
-    NgxChartsModule
-  ],
+
   templateUrl: './country-details.component.html',
   styleUrl: './country-details.component.scss'
 })
-export class CountryDetailsComponent implements OnInit {
+export class CountryDetailsComponent implements OnInit, OnDestroy {
 
   olympic!: Olympic;
+  private olympicsSubscription: Subscription | undefined;
+
   medalsPerYear: { "name": string, "series": { "name": string, "value": number }[] }[] = [];
   numberOfEntries!: number;
   totalNumberOfMedals!: number;
@@ -41,7 +39,6 @@ export class CountryDetailsComponent implements OnInit {
   constructor(private router: Router,
     private olympicService: OlympicService,
     private route: ActivatedRoute) {
-    Object.assign(this, this.medalsPerYear);
     this.numberOfEntries = 0;
     this.totalNumberOfAthletes = 0;
     this.totalNumberOfMedals = 0;
@@ -62,50 +59,47 @@ export class CountryDetailsComponent implements OnInit {
    * @returns {void} No return value.
    */
   ngOnInit(): void {
-
-    const olympicId = this.route.snapshot.params['id'];
-
-    this.olympicService.getOlympics().subscribe(
+    const olympicId: number = Number(this.route.snapshot.params['id']);
+    this.olympicsSubscription = this.olympicService.getOlympics().subscribe(
       (olympics) => {
         if (olympics) {
+          if (olympicId) {
+            const foundOlympic = olympics.find((olympic) => olympic.id === olympicId);
 
-          this.olympic = this.olympicService.getOlympicById(Number(olympicId));
-          if (this.olympic && this.olympic.country) {
-            //this.numberOfEntries =  this.olympicService.getNumberOfEntriesByCountry(this.olympic.country);
+            if (foundOlympic) {
+              this.olympic = foundOlympic;
 
-            this.olympicService.getParticipationsByCountry(this.olympic.country).subscribe(
-              (participations) => {
-                if (participations) {
-                  let series: { name: string; value: number; }[] = [];
-                  participations.forEach(
-                    (p) => {
-                      series.push({
-                        "name": p.year.toString(),
-                        "value": p.medalsCount
-                      });//end push
-                      //this.numberOfEntries ++;
+              this.olympicService.getParticipationsByCountryId(olympicId).subscribe(
+                (participations) => {
+                  if (participations) {
+                    let series: { name: string; value: number; }[] = [];
+                    participations.forEach(
+                      (p) => {
+                        series.push({
+                          "name": p.year.toString(),
+                          "value": p.medalsCount
+                        });//end push
+                      });//end foreach participations
 
+                    this.medalsPerYear.push({
+                      "name": foundOlympic.country,
+                      "series": series
+                    });
+                    this.numberOfEntries = participations.length;
+                    this.totalNumberOfMedals = this.olympicService.getTotalMedalsPerOlympic(foundOlympic);
+                    this.totalNumberOfAthletes = this.olympicService.getTotalAthletesPerOlympic(foundOlympic);
 
-                    });//end foreach participations
+                  }//end if part
 
-                  this.medalsPerYear.push({
-                    "name": this.olympic.country,
-                    "series": series
-                  });
-                  this.numberOfEntries = participations.length;
-                  this.totalNumberOfMedals = this.olympicService.getTotalMedalsPerOlympic(this.olympic);
-                  this.totalNumberOfAthletes = this.olympicService.getTotalAthletesPerOlympic(this.olympic);
+                });
+              }else {
+                  console.error('Country not found for the given countryId');
+                }
+              
+            }
 
-                }//end if part
-
-              }
-            )
           }
-
-        }
-      }
-    )
-
+        });
 
 
   }
@@ -122,5 +116,9 @@ export class CountryDetailsComponent implements OnInit {
   onGoBackToDashboard(): void {
     this.router.navigateByUrl(``);
 
+  }
+
+  ngOnDestroy(): void {
+    this.olympicsSubscription?.unsubscribe();
   }
 }

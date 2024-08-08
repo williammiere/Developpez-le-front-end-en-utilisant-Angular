@@ -1,9 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Component,  OnInit, OnDestroy } from '@angular/core';
+import { Observable, of, Subscription } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
-import { BarChartModule, PieChartModule } from "@swimlane/ngx-charts";
-import { JsonPipe } from '@angular/common';
 import { Router } from "@angular/router";
 
 
@@ -12,11 +10,10 @@ import { Router } from "@angular/router";
   templateUrl: 'home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy  {
   public olympics$: Observable<Olympic[]> = of([]);
   countryMedals: { "name": string, "value": number }[] = [];
-  //  countryMedalsWithCountryIds: { "name": string, "value": number,"extra":{"countryId":string} }[] = [];
-
+  private olympicsSubscription: Subscription | undefined;
   numberOfJOs!: number;
   numberOfCountries!: number;
 
@@ -26,9 +23,9 @@ export class HomeComponent implements OnInit {
   };
 
 
-  constructor(private olympicService: OlympicService, private router: Router) {
-    Object.assign(this, this.countryMedals);
- }/**
+  constructor(private olympicService: OlympicService, private router: Router) {}
+  
+  /**
  * Initializes the component by loading and processing Olympic data.
  *
  * This method is called when the component is initialized. It performs the following tasks:
@@ -41,10 +38,10 @@ export class HomeComponent implements OnInit {
  *
  * @returns {void} No return value.
  */
-  ngOnInit(): void {
-    this.olympics$ = this.olympicService.getOlympics();
 
-    this.olympicService.getOlympics().subscribe(
+  ngOnInit(): void {
+    
+    this.olympicsSubscription = this.olympicService.getOlympics().subscribe(
       (olympics) => {
         if (olympics) {
           olympics.forEach(olympic => {
@@ -59,6 +56,12 @@ export class HomeComponent implements OnInit {
       }
     )
 
+  }
+  /**
+   *  Unsubscribe when component is destroyed so that it can't produce memory leaks or side effects
+   */
+  ngOnDestroy(): void {
+    this.olympicsSubscription?.unsubscribe();
   }
 /**
  * Handles the event to navigate to a specific country's Olympic details page.

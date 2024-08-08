@@ -9,12 +9,9 @@ export const routes: Routes = [
     path: '',
     component: HomeComponent,
   },
-  {
-    path: 'countries',
-    component: HomeComponent,
-  },
-
-  { path: 'countries/:id', component: CountryDetailsComponent },
+  { 
+    path: 'countries/:id',
+    component: CountryDetailsComponent },
   {
     path: '**', // wildcard
     component: NotFoundComponent,
