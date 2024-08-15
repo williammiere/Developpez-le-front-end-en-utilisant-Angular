@@ -35,7 +35,7 @@ loadInitialData(): Observable<void> {
   );
 }
   constructor(private http: HttpClient) {
-    this.loadInitialData().subscribe();
+
   }
   
   /**
@@ -128,7 +128,7 @@ loadInitialData(): Observable<void> {
     if (!olympic || !olympic.participations) {
       return 0;
     }
-    return olympic.participations.reduce((total, participation) => total + participation.medalsCount, 0);
+    return olympic.participations.reduce((total, participation) => total + participation.medalsCount , 0);
   }
 
   /**

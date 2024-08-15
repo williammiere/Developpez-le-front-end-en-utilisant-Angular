@@ -71,7 +71,7 @@ $button-font-family: sans-serif, 'Arial', sans-serif;
     color: $button-subtitle-additional-text-color;
     font-size: 0.85em;
     bottom: 5px;
-    font-weight: bold;
+
   }
 }
 .subtitle-container {
@@ -79,36 +79,36 @@ $button-font-family: sans-serif, 'Arial', sans-serif;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 40px; // Espace entre les boutons
+  gap: 40px; 
   margin-bottom: 10px;
   margin-top: 10px;
 }
 .subtitle-text {
-  margin-bottom: 5px; // Ajustez l'espacement si nécessaire
+  margin-bottom: 5px; 
 }
 .button-back {
-  background-color: #04838F; /* Couleur de fond principale */
-  color: #f2f2f2; /* Couleur du texte */
-  font-size: 14px; /* Taille de la police */
-  padding: 10px 10px; /* Espacement intérieur */
-  border: none; /* Sans bordure */
-  border-radius: 5px; /* Coins arrondis */
-  font-family: Arial, sans-serif; /* Police sans serif */
-  cursor: pointer; /* Curseur pointer pour le clic */
-  margin-bottom: 10px; /* Marge en bas */
-  display: inline-block; /* Affichage en ligne */
-  text-align: center; /* Alignement du texte */
-  text-decoration: none; /* Sans décoration */
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Effet de transition */
+  background-color: #04838F;
+  color: #f2f2f2; 
+  font-size: 14px; 
+  padding: 10px 10px; 
+  border: none; 
+  border-radius: 5px; 
+  font-family: Arial, sans-serif; 
+  cursor: pointer; 
+  margin-bottom: 10px; 
+  display: inline-block; 
+  text-align: center; 
+  text-decoration: none; 
+  transition: background-color 0.3s ease, transform 0.3s ease; 
 }
 
 .button-back:hover {
-  background-color: #026a7f; /* Couleur de fond au survol (un bleu-vert plus foncé) */
-  transform: scale(1.05); /* Agrandir légèrement au survol */
+  background-color: #026a7f; 
+  transform: scale(1.05); 
 }
 
 .button-back:active {
-  background-color: #024d57; /* Couleur de fond lors du clic (encore plus foncé) */
+  background-color: #024d57; 
 }
 @media (max-width: 768px) {
   .button-title {
@@ -123,11 +123,11 @@ $button-font-family: sans-serif, 'Arial', sans-serif;
 
   .subtitle-container {
     flex-direction: column;
-    gap: 20px; // Réduit l'espace entre les boutons sur les petits écrans
+    gap: 20px; 
   }
 
   .center-content {
-    padding-top: 20px; // Réduit le padding pour les petits écrans
+    padding-top: 20px; 
   }
 }
 
@@ -142,3 +142,5 @@ $button-font-family: sans-serif, 'Arial', sans-serif;
     padding: 6px;
   }
 }
+
+

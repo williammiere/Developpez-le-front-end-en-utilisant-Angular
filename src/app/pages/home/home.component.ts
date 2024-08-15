@@ -1,5 +1,5 @@
-import { Component,  OnInit, OnDestroy } from '@angular/core';
-import { Observable, of, Subscription } from 'rxjs';
+import { Component,  OnInit, OnDestroy   } from '@angular/core';
+import { Observable, of, Subscription,switchMap } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Router } from "@angular/router";
@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
   selector: 'app-home',
   templateUrl: 'home.component.html',
   styleUrls: ['./home.component.scss'],
+
 })
 export class HomeComponent implements OnInit, OnDestroy  {
   public olympics$: Observable<Olympic[]> = of([]);
@@ -18,12 +19,8 @@ export class HomeComponent implements OnInit, OnDestroy  {
   numberOfCountries!: number;
 
 
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
 
-
-  constructor(private olympicService: OlympicService, private router: Router) {}
+  constructor(private olympicService: OlympicService, private router: Router) {  }
   
   /**
  * Initializes the component by loading and processing Olympic data.
@@ -40,21 +37,19 @@ export class HomeComponent implements OnInit, OnDestroy  {
  */
 
   ngOnInit(): void {
-    
-    this.olympicsSubscription = this.olympicService.getOlympics().subscribe(
-      (olympics) => {
-        if (olympics) {
-          olympics.forEach(olympic => {
-            this.countryMedals.push({
-              name: olympic.country,
-              value: this.olympicService.getTotalMedalsPerOlympic(olympic)
-            });
-            this.numberOfJOs = this.olympicService.getNumberOfJOs();
-            this.numberOfCountries = this.olympicService.getNumberOfCountries();
-          });
-        }
+    this.olympicsSubscription = this.olympicService.loadInitialData().pipe(
+      switchMap(() => this.olympicService.getOlympics())
+    ).subscribe((olympics) => {
+      if (olympics) {
+        this.countryMedals = olympics.map(olympic => ({
+          name: olympic.country,
+          value: this.olympicService.getTotalMedalsPerOlympic(olympic)
+        }));
+        this.numberOfJOs = this.olympicService.getNumberOfJOs();
+        this.numberOfCountries = this.olympicService.getNumberOfCountries();
       }
-    )
+    });
+
 
   }
   /**
@@ -82,7 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy  {
       olympic => olympic.country === event.name
     );
     if (selectedOlympicCountry) {
-      countryId = selectedOlympicCountry.id; // Récupérer l'ID du pays
+      countryId = selectedOlympicCountry.id; 
       this.router.navigateByUrl(`/countries/${countryId}`);
     } else {
       console.error('Country not found');

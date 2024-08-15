@@ -1,4 +1,3 @@
-
 <div class="center-content">
   <button class="button-title">Medals per Country</button>
   <div class="subtitle-container">
@@ -23,15 +22,21 @@
 
 </div>
 <!--Chart-->
+<!-- Custom Tooltip Template -->
+<ng-template #customTooltipTemplate let-model="model">
+  <div class="custom-tooltip">
+    <strong>{{ model.name }}</strong>
+    <br />
+    Medals: {{ model.value }}
+  </div>
+</ng-template>
 <div *ngIf="countryMedals.length; else noDataTemplate">
   <ngx-charts-pie-chart
+  [tooltipDisabled]="false"    
     [results]="countryMedals"
     [labels]="true"
-    (select)="onViewCountry($event)"
-
-
+     (select)="onViewCountry($event)"
   >
-
   </ngx-charts-pie-chart>
 </div>
 <ng-template #noDataTemplate>
@@ -39,6 +44,8 @@
     <p>Aucune donnée disponible pour les médailles olympiques.</p>
   </div>
 </ng-template>
+
+
 
 
 
