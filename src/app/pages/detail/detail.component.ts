@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Olympic } from 'src/app/core/models/Olympic';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription, map} from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -8,42 +8,61 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss',
 })
-export class DetailComponent {
-  public olympics$: Observable<Olympic[]> = of([]);
-  constructor(private olympicService: OlympicService) {}
+export class DetailComponent implements OnInit, OnDestroy {
+  private olympicsSubscription: Subscription | undefined;
+  constructor(
+    private olympicService: OlympicService,
+    private route: ActivatedRoute
+  ) {}
 
-  single!: any[];
-  view!: [number, number];
-  showXAxis!: boolean;
-  showYAxis!: boolean;
-  gradient!: boolean;
-  showLegend!: boolean;
-  showXAxisLabel!: boolean;
-  xAxisLabel!: string;
-  showYAxisLabel!: boolean;
-  yAxisLabel!: string;
+  olympicCountry!: string;
+  totalMedalCount!: number;
+  totalAthleteNumber!: number;
+  numberOfEntries!: number;
   graphDataChart!: any[];
-  colorScheme!: string;
-
-  //Configuration of line chart
-  chartConfig(): void {
-    this.single = [];
-
-    this.view = [700, 400];
-    this.showXAxis = true;
-    this.showYAxis = true;
-    this.gradient = false;
-    this.showLegend = true;
-    this.showXAxisLabel = true;
-    this.xAxisLabel = 'Years';
-    this.showYAxisLabel = true;
-    this.yAxisLabel = 'Medals';
-    this.graphDataChart = [];
-    this.colorScheme = 'cool';
-  }
 
   ngOnInit(): void {
-    this.chartConfig();
-    this.olympics$ = this.olympicService.getOlympics();
+    this.olympicCountry = this.route.snapshot.params['country'];
+
+    if (this.olympicCountry) {
+      this.olympicsSubscription = this.olympicService
+        .getOlympicByCountry(this.olympicCountry)
+        .pipe(
+          map((olympic) => {
+            if (olympic) {
+              // number of participations
+              this.numberOfEntries = olympic.participations.length;
+
+              // number of medals won by the country at all games
+              this.totalMedalCount = olympic.participations.reduce(
+                (acc, participation) => acc + participation.medalsCount,
+                0
+              );
+
+              // number of athletes at all games
+              this.totalAthleteNumber = olympic.participations.reduce(
+                (acc, participation) => acc + participation.athleteCount,
+                0
+              );
+              // add participations to chart data in the expected structure of ngx-line-chart
+              this.graphDataChart = [
+                {
+                  name: olympic.country,
+                  series: olympic.participations.map((participation) => ({
+                    name: participation.year + '',
+                    value: participation.medalsCount,
+                  })),
+                },
+              ];
+            }
+          })
+        )
+        .subscribe();
+    }
+  }
+
+  // Unsubscribe when component is destroyed so that it can't produce memory leaks or side effects
+  ngOnDestroy(): void {
+    this.olympicsSubscription?.unsubscribe();
   }
 }
