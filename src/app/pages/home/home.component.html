@@ -1,3 +1,16 @@
-<h2>Olympic games app</h2>
-<hr />
-<p>{{ (olympics$ | async)?.length }} data loaded</p>
+<div class="home-page">
+    <div class="home-logo">
+        <img src="../../../assets/TeleSportLogo.png" alt="TéléSport logo">
+    </div>
+    <div class="home-title">
+        <h2>Medals per Country</h2>
+    </div>
+    <div class="home-graph">
+        @for (olympicCountry of (olympics$ | async); track olympicCountry.id) {
+            <div class="graph-country">
+                <p>{{ olympicCountry.totalOfMedal }}</p>
+                <p>{{ olympicCountry.country }}</p>
+            </div>
+        }
+    </div>
+</div>

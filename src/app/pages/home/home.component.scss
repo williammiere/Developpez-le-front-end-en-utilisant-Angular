@@ -1,0 +1,21 @@
+.home-page {
+    position: fixed;
+    top: 1%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+.home-graph {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+h2 {
+    text-align: center;
+    margin: 1%;
+    background-color: skyblue;
+    border-radius: 10em;
+    box-shadow: 0.5em 0.5em 1em rgba(0, 0, 0, 0.5);
+}
+p {
+    text-align: center;
+    margin: 1%;
+}
