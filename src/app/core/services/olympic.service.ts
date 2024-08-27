@@ -1,31 +1,48 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable, ReplaySubject, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { Olympic } from '../models/Olympic';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class OlympicService {
-  private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<any>(undefined);
+    private olympicUrl = './assets/mock/olympic.json';
+    private olympics$ = new ReplaySubject<Olympic[]>(1); // Répéter les valeurs, avec une seule valeur
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        this.loadInitialData().subscribe();
+    }
 
-  loadInitialData() {
-    return this.http.get<any>(this.olympicUrl).pipe(
-      tap((value) => this.olympics$.next(value)),
-      catchError((error, caught) => {
-        // TODO: improve error handling
-        console.error(error);
-        // can be useful to end loading state and let the user know something went wrong
-        this.olympics$.next(null);
-        return caught;
-      })
-    );
-  }
+    private loadInitialData(): Observable<any> {
+        return this.http.get<Olympic[]>(this.olympicUrl).pipe(
+            tap((value) => {
+                this.olympics$.next(value);
+            }),
+            catchError((error) => {
+                console.error('Erreur lors du chargement des données:', error);
+                this.olympics$.next([]);
+                return throwError(
+                    () => new Error('Erreur lors du chargement des données')
+                );
+            })
+        );
+    }
 
-  getOlympics() {
-    return this.olympics$.asObservable();
-  }
+    getOlympics(): Observable<Olympic[]> {
+        return this.olympics$.asObservable();
+    }
+
+    getOlympicByCountry(country: string): Observable<Olympic | undefined> {
+        return this.olympics$.pipe(
+            map((arr) =>
+                arr.find(
+                    (o) =>
+                        o.country.toLowerCase().replace(/ /g, '-') ===
+                        country.toLowerCase().replace(/ /g, '-')
+                )
+            )
+        );
+    }
 }

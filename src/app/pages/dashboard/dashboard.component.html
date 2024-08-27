@@ -1,0 +1,11 @@
+<div>
+    <h2>Medals per country</h2>
+    <hr />
+    <div>
+        <div>Number of JOs {{ olympicsCount }}</div>
+        <div>Number of countries {{ countryCount }}</div>
+    </div>
+    <div>
+        <p-chart type="pie" [data]="chartData" [options]="chartOptions" (onDataSelect)="navigateToDetails($event)" />
+    </div>
+</div>
