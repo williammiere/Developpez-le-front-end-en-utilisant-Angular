@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OlympicService } from '../../core/services/olympic.service';
 import { Observable } from 'rxjs';
@@ -6,13 +6,15 @@ import { Olympic } from '../../core/models/Olympic';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 
 @Component({
     selector: 'app-details',
     standalone: true,
-    imports: [AsyncPipe, ChartModule, NgIf, ButtonModule],
+    imports: [AsyncPipe, ChartModule, NgIf, ButtonModule, CardModule],
     templateUrl: './details.component.html',
     styleUrl: './details.component.scss',
+    encapsulation: ViewEncapsulation.None
 })
 export class DetailsComponent implements OnInit {
     public olympic$!: Observable<Olympic | undefined>;
@@ -60,6 +62,7 @@ export class DetailsComponent implements OnInit {
 
         this.chartOptions = {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,

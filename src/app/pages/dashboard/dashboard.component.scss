@@ -1,0 +1,43 @@
+.infos {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  column-gap: 30px;
+  row-gap: 10px;
+  flex-wrap: wrap;
+
+  .p-card {
+    width: 200px;
+  }
+
+  > * .p-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+
+    > div:last-child {
+      font-weight: bold;
+      color: black;
+    }
+  }
+}
+
+
+.chart {
+  width: 100%;
+  max-width: 700px;
+  margin-top: 50px;
+  padding: 0 10px;
+
+  & canvas {
+    width: 360px;
+  }
+}
+
+@media (max-width: 500px) {
+  .chart {
+    margin-top: 30px;
+  }
+}

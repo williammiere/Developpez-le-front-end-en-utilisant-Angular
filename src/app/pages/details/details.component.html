@@ -1,8 +1,26 @@
-<p-button label="Back" [link]="true" icon="pi pi-home"  (onClick)="nagivateToHome()"/>
-<ng-container *ngIf="olympic$ | async as olympic">
-    <h1>{{ olympic.country }}</h1>
-    <div>Number of entries {{ olympicsCount }}</div>
-    <div>Total number of medals {{ totalMedalCount }}</div>
-    <div>Total number of athletes {{ totalAthleteCount }}</div>
-    <p-chart type="line" [data]="chartData" [options]="chartOptions" />
-</ng-container>
+<main>
+    <ng-container *ngIf="olympic$ | async as olympic">
+        <p-button styleClass="back-button" label="Back to home" [link]="true" icon="pi pi-arrow-left"
+                  (onClick)="nagivateToHome()" />
+        <h1>{{ olympic.country }}</h1>
+        <div class="infos">
+            <p-card>
+                <div>Number of entries</div>
+                <div>{{ olympicsCount }}</div>
+            </p-card>
+            <p-card>
+                <div>Total number of medals</div>
+                <div>{{ totalMedalCount }}</div>
+            </p-card>
+            <p-card>
+                <div>Total number of athletes</div>
+                <div>{{ totalAthleteCount }}</div>
+            </p-card>
+        </div>
+        <div class="chart">
+            <p-card>
+                <p-chart type="line" [data]="chartData" [options]="chartOptions" />
+            </p-card>
+        </div>
+    </ng-container>
+</main>

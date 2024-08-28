@@ -1,11 +1,19 @@
-<div>
+<main>
     <h2>Medals per country</h2>
-    <hr />
-    <div>
-        <div>Number of JOs {{ olympicsCount }}</div>
-        <div>Number of countries {{ countryCount }}</div>
+    <div class="infos">
+        <p-card>
+            <div>Number of JOs</div>
+            <div>{{ olympicsCount }}</div>
+        </p-card>
+        <p-card>
+            <div>Number of countries</div>
+            <div>{{ countryCount }}</div>
+        </p-card>
     </div>
-    <div>
-        <p-chart type="pie" [data]="chartData" [options]="chartOptions" (onDataSelect)="navigateToDetails($event)" />
+    <div class="chart">
+        <p-card>
+            <p-chart type="pie" [data]="chartData" [options]="chartOptions"
+                     (onDataSelect)="navigateToDetails($event)" />
+        </p-card>
     </div>
-</div>
+</main>

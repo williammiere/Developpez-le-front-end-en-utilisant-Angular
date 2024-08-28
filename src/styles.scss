@@ -3,5 +3,13 @@
 @import "primeicons/primeicons.css";
 
 body {
+  height: 100vh;
   margin: 0;
+  background-color: #f8fafc
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

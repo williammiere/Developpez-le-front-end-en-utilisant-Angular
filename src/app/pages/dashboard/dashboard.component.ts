@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { ChartModule } from 'primeng/chart';
 import { AsyncPipe, SlicePipe } from '@angular/common';
 import { Olympic } from '../../core/models/Olympic';
 import { Router } from '@angular/router';
+import { CardModule } from 'primeng/card';
 
 @Component({
     selector: 'app-home',
     standalone: true,
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
-    imports: [ChartModule, AsyncPipe, SlicePipe],
+    imports: [ChartModule, AsyncPipe, SlicePipe, CardModule],
+    encapsulation: ViewEncapsulation.None,
 })
 export class DashboardComponent implements OnInit {
     public olympics$: Observable<Olympic[]> = of([]);
@@ -66,6 +68,8 @@ export class DashboardComponent implements OnInit {
     }
 
     navigateToDetails(e: any) {
-        this.router.navigateByUrl(`details/${this.chartData.labels[e.element.index].toLowerCase().replace(/ /g, '-')}`);
+        this.router.navigateByUrl(
+            `details/${this.chartData.labels[e.element.index].toLowerCase().replace(/ /g, '-')}`
+        );
     }
 }

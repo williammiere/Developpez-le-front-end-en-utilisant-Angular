@@ -40,7 +40,7 @@ export class OlympicService {
                 arr.find(
                     (o) =>
                         o.country.toLowerCase().replace(/ /g, '-') ===
-                        country.toLowerCase().replace(/ /g, '-')
+                        country.toLowerCase()
                 )
             )
         );
