@@ -3,17 +3,22 @@
     <div class="infos">
         <p-card>
             <div>Number of JOs</div>
-            <div>{{ olympicsCount }}</div>
+            <div *ngIf="!loading;">
+                {{ olympicsCount }}
+            </div>
+            <p-skeleton width="3rem" height="19.5px" *ngIf="loading;" />
         </p-card>
         <p-card>
             <div>Number of countries</div>
-            <div>{{ countryCount }}</div>
+            <div *ngIf="!loading;">{{ countryCount }}</div>
+            <p-skeleton width="3rem" height="19.5px" *ngIf="loading;" />
         </p-card>
     </div>
     <div class="chart">
         <p-card>
             <p-chart type="pie" [data]="chartData" [options]="chartOptions"
-                     (onDataSelect)="navigateToDetails($event)" />
+                     (onDataSelect)="navigateToDetails($event)" *ngIf="!loading;" />
+            <p-progressSpinner ariaLabel="loading" *ngIf="loading;" styleClass="loading" />
         </p-card>
     </div>
 </main>

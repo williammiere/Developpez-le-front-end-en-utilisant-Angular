@@ -2,25 +2,36 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { ChartModule } from 'primeng/chart';
-import { AsyncPipe, SlicePipe } from '@angular/common';
+import { AsyncPipe, NgIf, SlicePipe } from '@angular/common';
 import { Olympic } from '../../core/models/Olympic';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
     selector: 'app-home',
     standalone: true,
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
-    imports: [ChartModule, AsyncPipe, SlicePipe, CardModule],
+    imports: [
+        ChartModule,
+        AsyncPipe,
+        SlicePipe,
+        CardModule,
+        NgIf,
+        SkeletonModule,
+        ProgressSpinnerModule,
+    ],
     encapsulation: ViewEncapsulation.None,
 })
 export class DashboardComponent implements OnInit {
-    public olympics$: Observable<Olympic[]> = of([]);
-    public olympicsCount: number = 0;
-    public countryCount: number = 0;
-    public chartData!: any;
-    public chartOptions!: any;
+    loading: boolean = true;
+    olympics$: Observable<Olympic[]> = of([]);
+    olympicsCount: number = 0;
+    countryCount: number = 0;
+    chartData!: any;
+    chartOptions!: any;
 
     constructor(
         private olympicService: OlympicService,
@@ -65,6 +76,8 @@ export class DashboardComponent implements OnInit {
                 },
             };
         });
+
+        this.loading = false;
     }
 
     navigateToDetails(e: any) {

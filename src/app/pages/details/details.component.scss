@@ -34,9 +34,19 @@
     width: 360px;
     height: 360px;
   }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+  }
 }
 
-.back-button {
-  position: absolute;
-  left: 0 ;
+main > *:first-child {
+  align-self: flex-start;
+}
+
+@media (max-width: 500px) {
+  .chart {
+    margin-top: 30px;
+  }
 }

@@ -7,22 +7,33 @@ import { AsyncPipe, NgIf } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
     selector: 'app-details',
     standalone: true,
-    imports: [AsyncPipe, ChartModule, NgIf, ButtonModule, CardModule],
+    imports: [
+        AsyncPipe,
+        ChartModule,
+        NgIf,
+        ButtonModule,
+        CardModule,
+        SkeletonModule,
+        ProgressSpinnerModule,
+    ],
     templateUrl: './details.component.html',
     styleUrl: './details.component.scss',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
 export class DetailsComponent implements OnInit {
-    public olympic$!: Observable<Olympic | undefined>;
-    public olympicsCount!: number;
-    public totalMedalCount!: number;
-    public totalAthleteCount!: number;
-    public chartData!: any;
-    public chartOptions!: any;
+    loading: boolean = true;
+    olympic$!: Observable<Olympic | undefined>;
+    olympicsCount!: number;
+    totalMedalCount!: number;
+    totalAthleteCount!: number;
+    chartData!: any;
+    chartOptions!: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -77,6 +88,9 @@ export class DetailsComponent implements OnInit {
                 },
             },
         };
+        setTimeout(() => {
+            this.loading = false;
+        }, 1500);
     }
 
     nagivateToHome() {
