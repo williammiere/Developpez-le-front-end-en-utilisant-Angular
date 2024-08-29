@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { OlympicCountry } from '../models/Olympic';
 
@@ -13,7 +13,7 @@ export class OlympicService {
 
   constructor(private http: HttpClient) {}
 
-  loadInitialData() {
+  loadInitialData(): Observable<OlympicCountry[]> {
     return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
       tap((value) => this.olympics$.next(value)),
       catchError((error, caught) => {
@@ -26,7 +26,7 @@ export class OlympicService {
     );
   }
 
-  getOlympics() {
+  getOlympics(): Observable<OlympicCountry[]> {
     return this.olympics$.asObservable();
   }
 }
