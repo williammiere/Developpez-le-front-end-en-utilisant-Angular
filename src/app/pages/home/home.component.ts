@@ -10,21 +10,10 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class HomeComponent implements OnInit {
   public olympics$: Observable<OlympicCountry[]> = of([]);
-  private totalOfMedal: number = 0;
 
   constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
-
-    this.olympics$.forEach(olympicCountries => {
-      olympicCountries.forEach(olympicCountry => {
-        for (let index = 0; index < olympicCountry.participations.length; index++) {
-          this.totalOfMedal += olympicCountry.participations[index].medalsCount;
-        }
-        olympicCountry.totalOfMedal = this.totalOfMedal;
-        this.totalOfMedal = 0;
-      });
-    });
   }
 }
