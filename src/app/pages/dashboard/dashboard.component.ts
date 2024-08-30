@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 /**
  * @Component Home page
@@ -26,12 +28,15 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         NgIf,
         SkeletonModule,
         ProgressSpinnerModule,
+        ToastModule,
     ],
     encapsulation: ViewEncapsulation.None,
+    providers: [MessageService],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     private notifier = new Subject<void>();
     loading: boolean = true;
+    error: boolean = false;
     olympics$: Observable<Olympic[]> = of([]);
     olympicsCount: number = 0;
     countryCount: number = 0;
@@ -41,52 +46,60 @@ export class DashboardComponent implements OnInit, OnDestroy {
     constructor(
         private olympicService: OlympicService,
         private router: Router,
+        private messageService: MessageService,
     ) {
     }
 
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
 
-        this.olympics$.pipe(takeUntil(this.notifier)).subscribe((olympics) => {
-            // Get the unique count of years
-            this.olympicsCount = new Set(
-                olympics.flatMap((o) => o.participations.map((p) => p.year)),
-            ).size;
+        this.olympics$.pipe(takeUntil(this.notifier)).subscribe({
+            next: (olympics) => {
+                // Get the unique count of years
+                this.olympicsCount = new Set(
+                    olympics.flatMap((o) => o.participations.map((p) => p.year)),
+                ).size;
 
-            this.countryCount = olympics.length;
+                this.countryCount = olympics.length;
 
-            // Define chart data
-            this.chartData = {
-                labels: olympics.map((o) => o.country),
-                datasets: [
-                    {
-                        label: 'Medals',
-                        data: olympics.map((o) => // Sum of medals for all olympics for a country
-                            o.participations.reduce(
-                                (sum, p) => sum + p.medalsCount,
-                                0,
+                // Define chart data
+                this.chartData = {
+                    labels: olympics.map((o) => o.country),
+                    datasets: [
+                        {
+                            label: 'Medals',
+                            data: olympics.map((o) => // Sum of medals for all olympics for a country
+                                o.participations.reduce(
+                                    (sum, p) => sum + p.medalsCount,
+                                    0,
+                                ),
                             ),
-                        ),
-                    },
-                ],
-            };
-
-            // Chart options
-            this.chartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
                         },
-                    },
-                },
-            };
+                    ],
+                };
+
+                this.loading = false;
+            },
+            error: (error) => {
+                this.error = true;
+                this.loading = false;
+                this.messageService.add({ severity: 'error', summary: 'An error occured', detail: error.message });
+            },
         });
 
-        this.loading = false;
+        // Chart options
+        this.chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                    },
+                },
+            },
+        };
     }
 
     ngOnDestroy(): void {
@@ -103,4 +116,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
             `details/${this.chartData.labels[e.element.index].toLowerCase().replace(/ /g, '-')}`,
         );
     }
+
 }

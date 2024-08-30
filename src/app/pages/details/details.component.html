@@ -1,7 +1,7 @@
 <main>
-    <p-button label="Back to home" [link]="true" icon="pi pi-arrow-left"
-              (onClick)="nagivateToHome()" />
     <ng-container *ngIf="olympic$ | async as olympic">
+        <p-button label="Back to home" [link]="true" icon="pi pi-arrow-left"
+                  (onClick)="nagivateToHome()" />
         <h2>{{ olympic.country }}</h2>
         <div class="infos">
             <p-card>

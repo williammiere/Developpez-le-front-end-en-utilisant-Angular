@@ -11,38 +11,50 @@ export class OlympicService {
     private olympicUrl = './assets/mock/olympic.json';
     private olympics$ = new ReplaySubject<Olympic[]>(1);
 
+    /**
+     * Load the data since the service is used.
+     * @param http
+     */
     constructor(private http: HttpClient) {
-        this.loadInitialData().subscribe();
+        this.loadInitialData();
     }
 
-    private loadInitialData(): Observable<Olympic[]> {
-        return this.http.get<Olympic[]>(this.olympicUrl).pipe(
-            tap((value) => {
-                this.olympics$.next(value);
-            }),
+    /**
+     * Load the olympics data. Should disappear once API calls will be used.
+     * @private
+     */
+    private loadInitialData(): void {
+        this.http.get<Olympic[]>(this.olympicUrl).pipe(
+            tap((value) => this.olympics$.next(value)),
             catchError((error) => {
-                console.error('Erreur lors du chargement des données:', error);
-                this.olympics$.next([]);
-                return throwError(
-                    () => new Error('Erreur lors du chargement des données')
-                );
-            })
-        );
+                this.olympics$.error(error);
+                return throwError(() => new Error('Failed to load data'));
+            }),
+        ).subscribe();
     }
 
+    /**
+     * Get the olympics list.
+     */
     getOlympics(): Observable<Olympic[]> {
         return this.olympics$.asObservable();
     }
 
+    /**
+     * Get the olympics of a country.
+     * It checks in the olympics list but it should call an API later.
+     * @param country the country (in kebab case)
+     * @return the olympic or undefined is no olympic found in the list. Once the API call is implement, it should not return undefined anymore but throw an error instead.
+     */
     getOlympicByCountry(country: string): Observable<Olympic | undefined> {
         return this.olympics$.pipe(
             map((arr) =>
                 arr.find(
                     (o) =>
                         o.country.toLowerCase().replace(/ /g, '-') ===
-                        country.toLowerCase()
-                )
-            )
+                        country.toLowerCase(),
+                ),
+            ),
         );
     }
 }

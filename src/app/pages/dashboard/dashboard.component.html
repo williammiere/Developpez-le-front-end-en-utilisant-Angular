@@ -1,4 +1,5 @@
 <main>
+    <p-toast [breakpoints]="{ '500px': { width: '95%', left: '2.5%' }}" styleClass="toast" />
     <h2>Medals per country</h2>
     <div class="infos">
         <p-card>
@@ -17,8 +18,9 @@
     <div class="chart">
         <p-card>
             <p-chart type="pie" [data]="chartData" [options]="chartOptions"
-                     (onDataSelect)="navigateToDetails($event)" *ngIf="!loading;" />
+                     (onDataSelect)="navigateToDetails($event)" *ngIf="!loading && !error;" />
             <p-progressSpinner ariaLabel="loading" *ngIf="loading;" styleClass="loading" />
+            <div *ngIf="!loading && error;" class="error">Could not load data</div>
         </p-card>
     </div>
 </main>

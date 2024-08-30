@@ -9,6 +9,8 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 /**
  * @Component Details page
@@ -26,6 +28,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         CardModule,
         SkeletonModule,
         ProgressSpinnerModule,
+        ToastModule,
     ],
     templateUrl: './details.component.html',
     styleUrl: './details.component.scss',
@@ -45,6 +48,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private olympicService: OlympicService,
         private router: Router,
+        private messageService: MessageService,
     ) {
     }
 
@@ -52,35 +56,46 @@ export class DetailsComponent implements OnInit, OnDestroy {
         const country = this.route.snapshot.params['country'];
         this.olympic$ = this.olympicService.getOlympicByCountry(country);
 
-        this.olympic$.pipe(takeUntil(this.notifier)).subscribe((o) => {
-            // If no olympic found, redirect to 404
-            if (o === undefined) {
-                this.router.navigate(['/**'], { skipLocationChange: true });
-            } else {
-                this.olympicsCount = o.participations.length;
+        this.olympic$.pipe(takeUntil(this.notifier)).subscribe({
+            next: (o) => {
+                // If no olympic found, redirect to 404
+                if (o === undefined) {
+                    this.router.navigate(['/**'], { skipLocationChange: true });
+                } else {
+                    this.olympicsCount = o.participations.length;
 
-                this.totalMedalCount = o.participations.reduce(
-                    (sum, p) => sum + p.medalsCount,
-                    0,
-                );
+                    this.totalMedalCount = o.participations.reduce(
+                        (sum, p) => sum + p.medalsCount,
+                        0,
+                    );
 
-                this.totalAthleteCount = o.participations.reduce(
-                    (sum, p) => sum + p.athleteCount,
-                    0,
-                );
+                    this.totalAthleteCount = o.participations.reduce(
+                        (sum, p) => sum + p.athleteCount,
+                        0,
+                    );
 
-                // Define chart data
-                this.chartData = {
-                    labels: o.participations.map((p) => p.year), // Years for x axis
-                    datasets: [
-                        {
-                            label: 'Medals',
-                            data: o.participations.map((p) => p.medalsCount), // Medal count for y axis
-                            fill: false,
-                        },
-                    ],
-                };
-            }
+                    // Define chart data
+                    this.chartData = {
+                        labels: o.participations.map((p) => p.year), // Years for x axis
+                        datasets: [
+                            {
+                                label: 'Medals',
+                                data: o.participations.map((p) => p.medalsCount), // Medal count for y axis
+                                fill: false,
+                            },
+                        ],
+                    };
+                }
+
+                // Simulate a timeout for loading
+                setTimeout(() => {
+                    this.loading = false;
+                }, 1500);
+            },
+            error: (error) => {
+                this.messageService.add({ severity: 'error', summary: 'An error occured', detail: error.message });
+                this.router.navigate(['/']);
+            },
         });
 
         // Chart options
@@ -101,10 +116,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 },
             },
         };
-        // Simulate a timeout for loading
-        setTimeout(() => {
-            this.loading = false;
-        }, 1500);
     }
 
     ngOnDestroy(): void {

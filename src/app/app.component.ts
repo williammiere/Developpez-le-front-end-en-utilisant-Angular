@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { RouterOutlet } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 /**
  * @Component Main component
@@ -8,8 +10,13 @@ import { RouterOutlet } from '@angular/router';
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, DashboardComponent],
+    imports: [RouterOutlet, DashboardComponent, ToastModule],
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
+    styleUrl: './app.component.scss',
+    providers: [MessageService],
+    encapsulation: ViewEncapsulation.None,
 })
-export class AppComponent {}
+export class AppComponent {
+    constructor(private messageService: MessageService) {
+    }
+}
