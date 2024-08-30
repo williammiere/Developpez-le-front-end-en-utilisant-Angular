@@ -9,13 +9,13 @@ import { Olympic } from '../models/Olympic';
 })
 export class OlympicService {
     private olympicUrl = './assets/mock/olympic.json';
-    private olympics$ = new ReplaySubject<Olympic[]>(1); // Répéter les valeurs, avec une seule valeur
+    private olympics$ = new ReplaySubject<Olympic[]>(1);
 
     constructor(private http: HttpClient) {
         this.loadInitialData().subscribe();
     }
 
-    private loadInitialData(): Observable<any> {
+    private loadInitialData(): Observable<Olympic[]> {
         return this.http.get<Olympic[]>(this.olympicUrl).pipe(
             tap((value) => {
                 this.olympics$.next(value);

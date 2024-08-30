@@ -2,7 +2,7 @@
     <p-button label="Back to home" [link]="true" icon="pi pi-arrow-left"
               (onClick)="nagivateToHome()" />
     <ng-container *ngIf="olympic$ | async as olympic">
-        <h1>{{ olympic.country }}</h1>
+        <h2>{{ olympic.country }}</h2>
         <div class="infos">
             <p-card>
                 <div>Number of entries</div>

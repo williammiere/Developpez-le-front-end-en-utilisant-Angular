@@ -9,6 +9,10 @@ import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
+/**
+ * @Component Home page
+ * @description Olympics dashboard with statistics.
+ */
 @Component({
     selector: 'app-home',
     standalone: true,
@@ -36,34 +40,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     constructor(
         private olympicService: OlympicService,
-        private router: Router
-    ) {}
+        private router: Router,
+    ) {
+    }
 
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
 
-        this.olympics$.pipe(takeUntil(this.notifier)).subscribe((data) => {
+        this.olympics$.pipe(takeUntil(this.notifier)).subscribe((olympics) => {
+            // Get the unique count of years
             this.olympicsCount = new Set(
-                data.flatMap((o) => o.participations.map((p) => p.year))
+                olympics.flatMap((o) => o.participations.map((p) => p.year)),
             ).size;
 
-            this.countryCount = data.length;
+            this.countryCount = olympics.length;
 
+            // Define chart data
             this.chartData = {
-                labels: data.map((o) => o.country),
+                labels: olympics.map((o) => o.country),
                 datasets: [
                     {
                         label: 'Medals',
-                        data: data.map((o) =>
+                        data: olympics.map((o) => // Sum of medals for all olympics for a country
                             o.participations.reduce(
                                 (sum, p) => sum + p.medalsCount,
-                                0
-                            )
+                                0,
+                            ),
                         ),
                     },
                 ],
             };
 
+            // Chart options
             this.chartOptions = {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -86,9 +94,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.notifier.complete();
     }
 
+    /**
+     * Navigate to the details page of the cliked country
+     * @param e Chart click event
+     */
     navigateToDetails(e: any) {
         this.router.navigateByUrl(
-            `details/${this.chartData.labels[e.element.index].toLowerCase().replace(/ /g, '-')}`
+            `details/${this.chartData.labels[e.element.index].toLowerCase().replace(/ /g, '-')}`,
         );
     }
 }

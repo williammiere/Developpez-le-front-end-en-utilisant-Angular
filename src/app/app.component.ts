@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { RouterOutlet } from '@angular/router';
 
+/**
+ * @Component Main component
+ */
 @Component({
     selector: 'app-root',
     standalone: true,

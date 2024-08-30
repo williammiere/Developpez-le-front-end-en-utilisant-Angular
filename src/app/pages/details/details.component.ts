@@ -10,6 +10,11 @@ import { CardModule } from 'primeng/card';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
+/**
+ * @Component Details page
+ * @description Details of the olympics for a country.
+ * Redirect to 404 page if no country is found.
+ */
 @Component({
     selector: 'app-details',
     standalone: true,
@@ -39,32 +44,38 @@ export class DetailsComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private olympicService: OlympicService,
-        private router: Router
-    ) {}
+        private router: Router,
+    ) {
+    }
 
     ngOnInit(): void {
         const country = this.route.snapshot.params['country'];
         this.olympic$ = this.olympicService.getOlympicByCountry(country);
 
         this.olympic$.pipe(takeUntil(this.notifier)).subscribe((o) => {
+            // If no olympic found, redirect to 404
             if (o === undefined) {
                 this.router.navigate(['/**'], { skipLocationChange: true });
             } else {
                 this.olympicsCount = o.participations.length;
+
                 this.totalMedalCount = o.participations.reduce(
                     (sum, p) => sum + p.medalsCount,
-                    0
+                    0,
                 );
+
                 this.totalAthleteCount = o.participations.reduce(
                     (sum, p) => sum + p.athleteCount,
-                    0
+                    0,
                 );
+
+                // Define chart data
                 this.chartData = {
-                    labels: o.participations.map((p) => p.year),
+                    labels: o.participations.map((p) => p.year), // Years for x axis
                     datasets: [
                         {
                             label: 'Medals',
-                            data: o.participations.map((p) => p.medalsCount),
+                            data: o.participations.map((p) => p.medalsCount), // Medal count for y axis
                             fill: false,
                         },
                     ],
@@ -72,6 +83,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             }
         });
 
+        // Chart options
         this.chartOptions = {
             responsive: true,
             maintainAspectRatio: false,
@@ -89,6 +101,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 },
             },
         };
+        // Simulate a timeout for loading
         setTimeout(() => {
             this.loading = false;
         }, 1500);
@@ -99,6 +112,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.notifier.complete();
     }
 
+    /**
+     * Navigate to home page
+     */
     nagivateToHome() {
         this.router.navigate(['/']);
     }
