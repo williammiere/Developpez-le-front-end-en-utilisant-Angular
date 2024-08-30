@@ -1,0 +1,30 @@
+<main>
+    <ng-container *ngIf="olympic$ | async as olympic">
+        <p-button label="Back to home" [link]="true" icon="pi pi-arrow-left"
+                  (onClick)="nagivateToHome()" />
+        <h2>{{ olympic.country }}</h2>
+        <div class="infos">
+            <p-card>
+                <div>Number of entries</div>
+                <div *ngIf="!loading">{{ olympicsCount }}</div>
+                <p-skeleton width="3rem" height="19.5px" *ngIf="loading;" />
+            </p-card>
+            <p-card>
+                <div>Total number of medals</div>
+                <div *ngIf="!loading">{{ totalMedalCount }}</div>
+                <p-skeleton width="3rem" height="19.5px" *ngIf="loading;" />
+            </p-card>
+            <p-card>
+                <div>Total number of athletes</div>
+                <div *ngIf="!loading">{{ totalAthleteCount }}</div>
+                <p-skeleton width="3rem" height="19.5px" *ngIf="loading;" />
+            </p-card>
+        </div>
+        <div class="chart">
+            <p-card>
+                <p-chart type="line" [data]="chartData" [options]="chartOptions" *ngIf="!loading" />
+                <p-progressSpinner ariaLabel="loading" *ngIf="loading;" styleClass="loading" />
+            </p-card>
+        </div>
+    </ng-container>
+</main>
