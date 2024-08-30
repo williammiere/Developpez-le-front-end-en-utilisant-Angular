@@ -1,22 +1,16 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { RouterOutlet } from '@angular/router';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs';
+import { OlympicService } from './core/services/olympic.service';
 
-/**
- * @Component Main component
- */
 @Component({
-    selector: 'app-root',
-    standalone: true,
-    imports: [RouterOutlet, DashboardComponent, ToastModule],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
-    providers: [MessageService],
-    encapsulation: ViewEncapsulation.None,
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-    constructor(private messageService: MessageService) {
-    }
+export class AppComponent implements OnInit {
+  constructor(private olympicService: OlympicService) {}
+
+  ngOnInit(): void {
+    this.olympicService.loadInitialData().pipe(take(1)).subscribe();
+  }
 }
