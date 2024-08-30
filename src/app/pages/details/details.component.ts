@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OlympicService } from '../../core/services/olympic.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Olympic } from '../../core/models/Olympic';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
@@ -26,7 +26,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     styleUrl: './details.component.scss',
     encapsulation: ViewEncapsulation.None,
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy {
+    private notifier = new Subject<void>();
     loading: boolean = true;
     olympic$!: Observable<Olympic | undefined>;
     olympicsCount!: number;
@@ -45,7 +46,7 @@ export class DetailsComponent implements OnInit {
         const country = this.route.snapshot.params['country'];
         this.olympic$ = this.olympicService.getOlympicByCountry(country);
 
-        this.olympic$.subscribe((o) => {
+        this.olympic$.pipe(takeUntil(this.notifier)).subscribe((o) => {
             if (o === undefined) {
                 this.router.navigate(['/**'], { skipLocationChange: true });
             } else {
@@ -91,6 +92,11 @@ export class DetailsComponent implements OnInit {
         setTimeout(() => {
             this.loading = false;
         }, 1500);
+    }
+
+    ngOnDestroy(): void {
+        this.notifier.next();
+        this.notifier.complete();
     }
 
     nagivateToHome() {

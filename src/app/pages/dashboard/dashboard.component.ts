@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Observable, of, Subject, takeUntil } from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { ChartModule } from 'primeng/chart';
 import { AsyncPipe, NgIf, SlicePipe } from '@angular/common';
@@ -25,7 +25,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ],
     encapsulation: ViewEncapsulation.None,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+    private notifier = new Subject<void>();
     loading: boolean = true;
     olympics$: Observable<Olympic[]> = of([]);
     olympicsCount: number = 0;
@@ -38,10 +39,10 @@ export class DashboardComponent implements OnInit {
         private router: Router
     ) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
 
-        this.olympics$.subscribe((data) => {
+        this.olympics$.pipe(takeUntil(this.notifier)).subscribe((data) => {
             this.olympicsCount = new Set(
                 data.flatMap((o) => o.participations.map((p) => p.year))
             ).size;
@@ -78,6 +79,11 @@ export class DashboardComponent implements OnInit {
         });
 
         this.loading = false;
+    }
+
+    ngOnDestroy(): void {
+        this.notifier.next();
+        this.notifier.complete();
     }
 
     navigateToDetails(e: any) {
