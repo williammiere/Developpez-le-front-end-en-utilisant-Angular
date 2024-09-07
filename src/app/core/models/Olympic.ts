@@ -1,4 +1,10 @@
-// TODO: create here a typescript interface for an olympic country
+interface Country{
+    id: number;
+    country: string;
+    participations: Participation[];
+}
+
+
 /*
 example of an olympic country:
 {
