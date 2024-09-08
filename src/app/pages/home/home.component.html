@@ -3,13 +3,11 @@
       <h2>Olympic games app</h2>
     </div>
     <div class="dashboard">
-      <p>{{ (olympics$ | async)?.length }} data loaded</p>
-      <ul>
-        <li *ngFor="let olympic of olympics$ | async">
-          <h3>{{ olympic.country }}</h3>
-          <p>ID: {{ olympic.id }}</p>
-          <p>Participations: {{ olympic.participations.length }}</p>
-        </li>
-      </ul>
+      <ngx-charts-pie-chart
+        *ngIf="getNGXData() | async as data"
+        [results]="data"
+        [labels]="true"
+        (select)="onSelect($event)">
+      </ngx-charts-pie-chart>
     </div>
   </div>
