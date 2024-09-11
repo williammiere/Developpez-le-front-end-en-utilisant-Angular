@@ -12,13 +12,13 @@ import { Router } from '@angular/router';
 
 export class HomeComponent implements OnInit {
   private olympics$: Observable<Olympic[]> = of([this.olympicService.getErrorOlympic()]);
-  private convertedOlympics$: Observable<NGXData[]> =this.convertData();
+  private convertedOlympics$: Observable<NGXData[]> = this.convertData();
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
-    this.convertedOlympics$ = this.olympics$.pipe(map(olympics => olympics.map(olympic => ({name: olympic.country, value: olympic.participations.length}))));
+    this.convertedOlympics$ = this.convertData();
   }
 
   private convertData(): Observable<NGXData[]> {
