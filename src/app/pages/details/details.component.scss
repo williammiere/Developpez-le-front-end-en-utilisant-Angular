@@ -1,0 +1,77 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 70vh;
+  width: 97vw;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title2{
+  display: flex;
+  align-items: center;
+}
+
+.dashboard h3{
+  width: 20%;
+  min-width: 300px;
+  font-size: 30px;
+  border-radius: 5px;
+  background-color: rgb(81, 158, 168);
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.medals {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.medals p{
+  font-size: 20px;
+}
+
+.case{
+  border: 2px solid rgb(81, 158, 168);
+  border-radius: 15px;
+}
+
+.jo{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.countries {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.container .title{
+    width: 100%;
+    text-align: center;
+}
+
+.container .dashboard{
+    width: 100%;
+    height: 60%;
+}
+
+.pie-label{
+  font-size: 20px !important;
+}
+
+.ngx-charts-tooltip-content{
+  font-size: 50 !important;
+}

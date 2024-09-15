@@ -10,10 +10,6 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: '**', // wildcard
-    component: NotFoundComponent,
-  },
-  {
     path: 'home',
     component: HomeComponent,
   },
@@ -21,6 +17,10 @@ const routes: Routes = [
     path: 'details',
     component: DetailsComponent,
   },
+  {
+    path: '**', // wildcard, always put at the end
+    component: NotFoundComponent,
+  }
 ];
 
 @NgModule({

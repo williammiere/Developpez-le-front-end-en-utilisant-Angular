@@ -1,1 +1,24 @@
-<p>details works!</p>
+<div class="container">
+  <div class="title">
+    <h2>Olympic games app</h2>
+  </div>
+  <div class="dashboard">
+    <div class="title2">
+      <h3>Medals per country</h3>
+    </div>
+    <div class="medals">
+      <div class="jo">
+        <p class="case">Number of entries<br><div [innerHTML]=""></div></p>
+      </div>
+      <div class="countries">
+        <p class="case">Total number of medals<br><div [innerHTML]=""></div></p>
+      </div>
+      <div class="countries"></div>
+        <p class="case">Total number of athletes<br><div [innerHTML]=""></div></p>
+      </div>
+    </div>
+      <ngx-charts-line-chart
+        *ngIf="getNGXLineData() | async as data"
+        [results]="data">
+      </ngx-charts-line-chart>
+</div>
