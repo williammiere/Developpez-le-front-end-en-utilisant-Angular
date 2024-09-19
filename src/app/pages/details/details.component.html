@@ -13,12 +13,22 @@
       <div class="countries">
         <p class="case">Total number of medals<br><div [innerHTML]=""></div></p>
       </div>
-      <div class="countries"></div>
+      <div class="athletes">
         <p class="case">Total number of athletes<br><div [innerHTML]=""></div></p>
       </div>
     </div>
-      <ngx-charts-line-chart
-        *ngIf="getNGXLineData() | async as data"
-        [results]="data">
-      </ngx-charts-line-chart>
+  </div>
+  <div class="chart">
+    <ngx-charts-line-chart
+      *ngIf="getNGXLineData() | async as data"
+      [results]="data"
+      [legend]="true"
+      [xAxis]="true"
+      [yAxis]="true"
+      xAxisLabel="Année"
+      yAxisLabel="Médailles"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true">
+    </ngx-charts-line-chart>
+  </div>
 </div>

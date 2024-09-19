@@ -1,4 +1,4 @@
-.container {
+app-home .container {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -6,18 +6,18 @@
   width: 97vw;
 }
 
-.dashboard {
+app-home .dashboard {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.title2{
+app-home .title2{
   display: flex;
   align-items: center;
 }
 
-.dashboard h3{
+app-home .dashboard h3{
   width: 20%;
   min-width: 300px;
   font-size: 30px;
@@ -29,49 +29,49 @@
   text-align: center;
 }
 
-.medals {
+app-home .medals {
   display: flex;
   justify-content: center;
   width: 100%;
 }
 
-.medals p{
+app-home .medals p{
   font-size: 20px;
 }
 
-.case{
+app-home .case{
   border: 2px solid rgb(81, 158, 168);
   border-radius: 15px;
 }
 
-.jo{
+app-home .jo{
   display: flex;
   justify-content: center;
   text-align: center;
   width: 100%;
 }
 
-.countries {
+app-home .countries {
   display: flex;
   justify-content: center;
   text-align: center;
   width: 100%;
 }
 
-.container .title{
+app-home .container .title{
     width: 100%;
     text-align: center;
 }
 
-.container .dashboard{
+app-home .container .dashboard{
     width: 100%;
     height: 60%;
 }
 
-.pie-label{
+app-home .pie-label{
   font-size: 20px !important;
 }
 
-.ngx-charts-tooltip-content{
+app-home .ngx-charts-tooltip-content{
   font-size: 50 !important;
 }
