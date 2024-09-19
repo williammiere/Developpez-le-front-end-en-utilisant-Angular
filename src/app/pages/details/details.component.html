@@ -8,13 +8,13 @@
     </div>
     <div class="medals">
       <div class="jo">
-        <p class="case">Number of entries<br><div [innerHTML]=""></div></p>
+        <p class="case">Number of entries<br><div [innerHTML]="getCountryJo()"></div></p>
       </div>
       <div class="countries">
-        <p class="case">Total number of medals<br><div [innerHTML]=""></div></p>
+        <p class="case">Total number of medals<br><div [innerHTML]="getMedailNumber()"></div></p>
       </div>
       <div class="athletes">
-        <p class="case">Total number of athletes<br><div [innerHTML]=""></div></p>
+        <p class="case">Total number of athletes<br><div [innerHTML]="getAthletesNumber()"></div></p>
       </div>
     </div>
   </div>
@@ -28,7 +28,9 @@
       xAxisLabel="Année"
       yAxisLabel="Médailles"
       [showXAxisLabel]="true"
-      [showYAxisLabel]="true">
+      [showYAxisLabel]="true"
+      [xAxisTickFormatting]="xAxisFormating"
+      [yScaleMax]="yScaleMax">
     </ngx-charts-line-chart>
   </div>
 </div>

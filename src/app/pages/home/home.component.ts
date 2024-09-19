@@ -24,12 +24,12 @@ export class HomeComponent implements OnInit {
     this.convertedOlympics$ = this.convertData();
     this.olympics$.subscribe(olympics => {
       this.countryNumber = olympics.length;
-      this.joNumber = this.calculJoNumber();
+      this.joNumber = this.olympicService.calculJoNumber();
   });
 }
 
   private convertData(): Observable<NGXData[]> {
-    return this.olympics$.pipe(map(olympics => olympics.map(olympic => ({name: olympic.country, value: this.calculCountryMedals(olympic.country)}))));
+    return this.olympics$.pipe(map(olympics => olympics.map(olympic => ({name: olympic.country, value: this.olympicService.calculCountryMedals(olympic.country)}))));
   }
 
   getNGXData(): Observable<NGXData[]> {
@@ -39,45 +39,6 @@ export class HomeComponent implements OnInit {
   onSelect(event: any): void {
     const country = event.name;
     this.router.navigate(['/details'], {queryParams:{country: country}});
-  }
-
-  calculCountryMedals(country:string): number {
-    var medals = 0;
-    const countryMedals = this.olympics$.pipe(
-      map(olympics => olympics.map(olympic => ({
-      name: olympic.country,
-      medalsCount: olympic.participations.reduce((total, participation) => total + participation.medalsCount, 0)
-      })))
-    );
-
-    countryMedals.forEach(countryMedals => {
-      countryMedals.forEach(countryMedal => {
-        if (countryMedal.name === country) {
-          medals = countryMedal.medalsCount;
-        }
-      });
-    });
-
-    return medals;
-
-  }
-
-  calculJoNumber(): number {
-    var jos = 0;
-    var uniqueJo:number[] = [];
-    const participations = this.olympics$.pipe(map(olympics => olympics.map(olympic => olympic.participations)));
-    participations.forEach(participations => {
-      participations.forEach(participation => {
-        participation.forEach(part => {
-          if (!uniqueJo.includes(part.year)) {
-            uniqueJo.push(part.year);
-            jos++;
-          }
-        }
-        )
-      });
-    });
-    return jos;
   }
 
   getCountryNumber(): number {
