@@ -19,6 +19,7 @@ export class OlympicService {
       tap((value) => this.olympics$.next(value)),
       catchError((error, caught) => {
         // TODO: improve error handling
+        alert('An error occurred while loading the data. Check your connection or try again later.');
         console.error(error);
         // can be useful to end loading state and let the user know something went wrong
         this.olympics$.next([this.errorOlympic]);
@@ -34,8 +35,8 @@ export class OlympicService {
   getOlympic(id: string): Observable<Olympic[]> {
       const olympics = this.getOlympics();
       const olympic = olympics.pipe(
-        filter(olympics => olympics.some(olympic => olympic.country === id)), // Vérifie si au moins un élément satisfait la condition
-        map(olympics => olympics.filter(olympic => olympic.country === id)) // Filtre les éléments pour ne garder que ceux qui satisfont la condition
+        filter(olympics => olympics.some(olympic => olympic.country === id)), // Verifies if the element exists
+        map(olympics => olympics.filter(olympic => olympic.country === id)) // Gets the element
       );
       return olympic;
   }
@@ -44,17 +45,16 @@ export class OlympicService {
     return this.errorOlympic;
   }
 
-  calculCountryMedals(country:string): number {
-    console.log(country);
+  calculCountryMedals(country:string): number { // Calculates the number of medals for a country
     var medals = 0;
-    const countryMedals = this.olympics$.pipe(
+    const countryMedals = this.olympics$.pipe( // Gets the number of medals for each country
       map(olympics => olympics.map(olympic => ({
       name: olympic.country,
-      medalsCount: olympic.participations.reduce((total, participation) => total + participation.medalsCount, 0)
+      medalsCount: olympic.participations.reduce((total, participation) => total + participation.medalsCount, 0) // Sums the number of medals for each participation
       })))
     );
     
-    countryMedals.forEach(countryMedals => {
+    countryMedals.forEach(countryMedals => { // Gets the number of medals for the specified country
       countryMedals.forEach(countryMedal => {
         if (countryMedal.name === country) {
           medals = countryMedal.medalsCount;
@@ -62,17 +62,16 @@ export class OlympicService {
       });
     });
     return medals;
+}
 
-  }
-
-  calculJoNumber(): number {
+  calculJoNumber(): number { // Calculates the total number of JOs
     var jos = 0;
     var uniqueJo:number[] = [];
-    const participations = this.olympics$.pipe(map(olympics => olympics.map(olympic => olympic.participations)));
-    participations.forEach(participations => {
+    const participations = this.olympics$.pipe(map(olympics => olympics.map(olympic => olympic.participations))); // Gets the participations from each country
+    participations.forEach(participations => { // Gets the number of JOs of each country
       participations.forEach(participation => {
         participation.forEach(part => {
-          if (!uniqueJo.includes(part.year)) {
+          if (!uniqueJo.includes(part.year)) { // Verifies if the JO already exists by checking if the year is already in the array
             uniqueJo.push(part.year);
             jos++;
           }
@@ -83,15 +82,15 @@ export class OlympicService {
     return jos;
   }
 
-  calculJoCountryNumber(country:string): number {
+  calculJoCountryNumber(country:string): number { // Calculates the number of JOs for a country
     var jos = 0;
     var uniqueJo: number[] = [];
-    const countryParticipations = this.olympics$.pipe(
+    const countryParticipations = this.olympics$.pipe( // Gets the participations of the specified country
       map(olympics => olympics.find(olympic => olympic.country === country)),
       map(olympic => olympic ? olympic.participations : [])
     );
 
-    countryParticipations.subscribe(participations => {
+    countryParticipations.subscribe(participations => { // counts the number of participations
       participations.forEach(part => {
       if (!uniqueJo.includes(part.year)) {
         uniqueJo.push(part.year);
@@ -102,15 +101,15 @@ export class OlympicService {
     return jos;
   }
 
-  calculAthletesNumber(country:string): number {
+  calculAthletesNumber(country:string): number { // Calculates the number of athletes for a country
     let athletes = 0;
-    const countryParticipations = this.olympics$.pipe(
+    const countryParticipations = this.olympics$.pipe( // Gets the participations of the specified country
       map(olympics => olympics.find(olympic => olympic.country === country)),
       map(olympic => olympic ? olympic.participations : [])
     );
 
     countryParticipations.subscribe(participations => {
-      athletes = participations.reduce((total, participation) => total + participation.athleteCount, 0);
+      athletes = participations.reduce((total, participation) => total + participation.athleteCount, 0); // Sums the number of athletes for each participation
     });
     return athletes;
   }

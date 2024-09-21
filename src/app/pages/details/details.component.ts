@@ -20,14 +20,14 @@ export class DetailsComponent implements OnInit {
   private medailNumber: number = 0;
   private countryJo: number = 0;
   private athletesNumber: number = 0;
-  public yScaleMax: number = 0;
+  public yScaleMax: number = 0; // Just to have a more visible chart
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.country$ = this.olympicService.getOlympic(this.router.url.split('country=')[1].replace('%20', ' '));
-    this.convertedCountry$ = this.convertData();
-    this.country$.subscribe(country => {
+    this.country$ = this.olympicService.getOlympic(this.router.url.split('country=')[1].replace('%20', ' ')); // Gets the specified country
+    this.convertedCountry$ = this.convertData(); // Converts the data to the format needed for the ngx-charts
+    this.country$.subscribe(country => { // Gets the number of medals, number of JO and number of athletes for the specified country
       this.medailNumber = this.olympicService.calculCountryMedals(country[0].country);
       this.countryJo = this.olympicService.calculJoCountryNumber(country[0].country);
       this.athletesNumber = this.olympicService.calculAthletesNumber(country[0].country);
@@ -67,7 +67,7 @@ export class DetailsComponent implements OnInit {
     return value as string;
   }
 
-  private calculateYScaleMax(): void {
+  private calculateYScaleMax(): void { // Get the maximum amount of medals and multiply it by 1.5
     this.country$.pipe(
       map(olympics => olympics.flatMap(olympic => olympic.participations.map(participation => participation.medalsCount))),
       map(medals => Math.max(...medals) * 1.5)

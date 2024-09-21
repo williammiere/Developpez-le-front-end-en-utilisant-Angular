@@ -1,3 +1,17 @@
+# Olympic Games App
+
+Vous trouverez dans le dossier src/app/pages les deux page de cette application "home" et "details".
+Ces classes font appel à des services qui sont centralisés dans le dossier src/app/core/services.
+Vous trouverez au même niveau le dossier contenant les modèles.
+NGXData correspond au format de données utilisé par le pie chart (home), quand NGXLineData correspond au line chart (details).
+
+Pour lancer le serveur angular : npm start ou ng serve selon votre configuration
+Pour compiler le projet : ng build
+
+
+
+En cas de doute, consulter la partie de ce README générée automatiquement par Angular :
+
 # OlympicGamesStarter
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
