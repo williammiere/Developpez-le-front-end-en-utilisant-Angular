@@ -75,3 +75,9 @@ app-home .pie-label{
 app-home .ngx-charts-tooltip-content{
   font-size: 50 !important;
 }
+
+@media screen and (max-width: 900px) {
+  app-home .pie-label{
+    font-size: 15px !important;
+  }
+}

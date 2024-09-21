@@ -6,6 +6,11 @@ app-details .container {
   width: 97vw;
 }
 
+app-details .container a{
+  margin-left: 2%;
+  margin-right: auto;
+}
+
 app-details .dashboard {
   display: flex;
   flex-direction: column;
@@ -86,4 +91,10 @@ app-details .line-label{
 
 app-details .ngx-charts-tooltip-content{
   font-size: 50 !important;
+}
+
+@media screen and (max-width: 900px) {
+  app-details .chart{
+    width: 100%;
+  }
 }
