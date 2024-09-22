@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { catchError, filter, tap } from 'rxjs/operators';
 import { Olympic } from '../models/Olympic';
 import { ErrorService } from './error.service';
@@ -20,21 +20,21 @@ export class OlympicService {
     return this.http.get<Olympic[]>(this.olympicUrl).pipe(
       tap((value) => this.olympics$.next(value)),
       catchError((error, caught) => {
-        // TODO: improve error handling
         alert('An error occurred while loading the data. Check your connection or try again later.');
         console.error(error);
+        this.router.navigateByUrl("/home");
         // can be useful to end loading state and let the user know something went wrong
-        this.olympics$.next([this.errorOlympic]);
-        return throwError(() => this.errorService.setMessageError());
+        this.olympics$.next([]);
+        return this.olympics$;
       })
     );
   }
 
   getOlympics() {
-    return this.olympics$.asObservable();
+    return this.olympics$;
   }
 
-  getOlympic(id: string): Observable<Olympic[]> {
+  getOlympic(id: string): Observable<Olympic[]> { // Returns an array with only the specified olympic 
       const olympics = this.getOlympics();
       const olympic = olympics.pipe(
         map(olympics => olympics.filter(olympic => olympic.country === id)) // Gets the element
