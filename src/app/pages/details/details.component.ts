@@ -29,9 +29,14 @@ export class DetailsComponent implements OnInit {
     this.country$ = this.olympicService.getOlympic(this.router.url.split('country=')[1].replace('%20', ' ')); // Gets the specified country
     this.convertedCountry$ = this.convertData(); // Converts the data to the format needed for the ngx-charts
     this.country$.pipe(takeUntil(this.destroy$)).subscribe(country => { // Gets the number of medals, number of JO and number of athletes for the specified country
-      this.medailNumber = this.olympicService.calculCountryMedals(country[0].country);
-      this.countryJo = this.olympicService.calculJoCountryNumber(country[0].country);
-      this.athletesNumber = this.olympicService.calculAthletesNumber(country[0].country);
+      if(country[0]===undefined){
+        alert("This country is not in the database");
+        this.router.navigateByUrl("/home");
+      }else{
+        this.medailNumber = this.olympicService.calculCountryMedals(country[0].country);
+        this.countryJo = this.olympicService.calculJoCountryNumber(country[0].country);
+        this.athletesNumber = this.olympicService.calculAthletesNumber(country[0].country);
+      }
     });
     this.calculateYScaleMax();
 }
@@ -42,11 +47,16 @@ ngOnDestroy(): void {
 }
 
   private convertData(): Observable<NGXLineData[]> {
-    return this.country$.pipe(map(olympics => olympics.map(olympic => ({name: olympic.country, series: this.convertParticipations(olympic.participations)}))));
+    return this.country$.pipe(map(olympics => olympics.map(olympic => (
+      {name: olympic.country, series: this.convertParticipations(olympic.participations)}
+    ))
+  ));
   }
 
   private convertParticipations(participations: Participation[]): NGXData[] {
-    return participations.map(participation => ({name: participation.year as unknown as string, value: participation.medalsCount}));
+    return participations.map(participation => (
+      {name: participation.year as unknown as string, value: participation.medalsCount}
+    ));
   }
 
   getMedailNumber(): number {

@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, throwError } from 'rxjs';
 import { catchError, filter, tap } from 'rxjs/operators';
 import { Olympic } from '../models/Olympic';
+import { ErrorService } from './error.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +14,7 @@ export class OlympicService {
   private errorOlympic = {id: -1, country: 'Error', participations: []};
   private olympics$ = new BehaviorSubject<Olympic[]>([this.errorOlympic]);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private errorService:ErrorService, private router:Router) {}
 
   loadInitialData() {
     return this.http.get<Olympic[]>(this.olympicUrl).pipe(
@@ -23,7 +25,7 @@ export class OlympicService {
         console.error(error);
         // can be useful to end loading state and let the user know something went wrong
         this.olympics$.next([this.errorOlympic]);
-        return caught;
+        return throwError(() => this.errorService.setMessageError());
       })
     );
   }
@@ -35,7 +37,6 @@ export class OlympicService {
   getOlympic(id: string): Observable<Olympic[]> {
       const olympics = this.getOlympics();
       const olympic = olympics.pipe(
-        filter(olympics => olympics.some(olympic => olympic.country === id)), // Verifies if the element exists
         map(olympics => olympics.filter(olympic => olympic.country === id)) // Gets the element
       );
       return olympic;
