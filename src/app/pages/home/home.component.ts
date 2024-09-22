@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable, of, map } from 'rxjs';
+import { Observable, of, map, takeUntil, Subject } from 'rxjs';
 import { NGXData } from 'src/app/core/models/NGXData';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
@@ -16,16 +16,22 @@ export class HomeComponent implements OnInit {
   private convertedOlympics$: Observable<NGXData[]> = this.convertData();
   private joNumber: number = 0;
   private countryNumber: number = 0;
+  private destroy$ = new Subject<void>();
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
     this.convertedOlympics$ = this.convertData();
-    this.olympics$.subscribe(olympics => {
+    this.olympics$.pipe(takeUntil(this.destroy$)).subscribe(olympics => {
       this.countryNumber = olympics.length;
       this.joNumber = this.olympicService.calculJoNumber();
-  });
+    });
+}
+
+ngOnDestroy(): void {
+  this.destroy$.next();
+  this.destroy$.complete();
 }
 
   private convertData(): Observable<NGXData[]> {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable, of, map } from 'rxjs';
+import { Observable, of, map, takeUntil, Subject } from 'rxjs';
 import { NGXData } from 'src/app/core/models/NGXData';
 import { NGXLineData } from 'src/app/core/models/NGXLineData';
 import { Olympic } from 'src/app/core/models/Olympic';
@@ -21,18 +21,24 @@ export class DetailsComponent implements OnInit {
   private countryJo: number = 0;
   private athletesNumber: number = 0;
   public yScaleMax: number = 0; // Just to have a more visible chart
+  private destroy$ = new Subject<void>();
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
     this.country$ = this.olympicService.getOlympic(this.router.url.split('country=')[1].replace('%20', ' ')); // Gets the specified country
     this.convertedCountry$ = this.convertData(); // Converts the data to the format needed for the ngx-charts
-    this.country$.subscribe(country => { // Gets the number of medals, number of JO and number of athletes for the specified country
+    this.country$.pipe(takeUntil(this.destroy$)).subscribe(country => { // Gets the number of medals, number of JO and number of athletes for the specified country
       this.medailNumber = this.olympicService.calculCountryMedals(country[0].country);
       this.countryJo = this.olympicService.calculJoCountryNumber(country[0].country);
       this.athletesNumber = this.olympicService.calculAthletesNumber(country[0].country);
-  });
+    });
     this.calculateYScaleMax();
+}
+
+ngOnDestroy(): void {
+  this.destroy$.next();
+  this.destroy$.complete();
 }
 
   private convertData(): Observable<NGXLineData[]> {
