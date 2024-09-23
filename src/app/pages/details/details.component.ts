@@ -85,8 +85,8 @@ ngOnDestroy(): void {
 
   private calculateYScaleMax(): void { // Get the maximum amount of medals and multiply it by 1.5
     this.country$.pipe(
-      map(olympics => olympics.flatMap(olympic => olympic.participations.map(participation => participation.medalsCount))),
-      map(medals => Math.max(...medals) * 1.5)
+      map(olympics => olympics.flatMap(olympic => olympic.participations.map(participation => participation.medalsCount))), // Applies a function to each element of the array
+      map(medals => Math.max(...medals) * 1.5) // From all the medals, gets the max amount and multiplies it by 1.5
     ).subscribe(maxValue => {
       this.yScaleMax = maxValue;
     });

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
-import { catchError, filter, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Olympic } from '../models/Olympic';
 import { ErrorService } from './error.service';
 import { Router } from '@angular/router';
