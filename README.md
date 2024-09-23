@@ -10,7 +10,9 @@ NGXData correspond au format de données utilisé par le pie chart (home), quand
 
 Les données de test sont récupérées depuis le dossier src/assets/mock
 
-Pour lancer le serveur angular : npm start ou ng serve selon votre configuration
+Pour installer node_modules, utilisez npm install.
+
+Pour lancer le serveur angular : npm start, npm run start ou ng serve selon votre configuration
 
 Pour compiler le projet : ng build
 
