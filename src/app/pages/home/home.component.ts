@@ -21,15 +21,15 @@ export class HomeComponent implements OnInit {
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.olympics$ = this.olympicService.getOlympics();
-    this.convertedOlympics$ = this.convertData();
-    this.olympics$.pipe(takeUntil(this.destroy$)).subscribe(olympics => {
+    this.olympics$ = this.olympicService.getOlympics(); // Gets the countries
+    this.convertedOlympics$ = this.convertData(); // converts data
+    this.olympics$.pipe(takeUntil(this.destroy$)).subscribe(olympics => { // subscribes to olympics$ and set the country number and the JOs number
       this.countryNumber = olympics.length;
       this.joNumber = this.olympicService.calculJoNumber();
     });
 }
 
-ngOnDestroy(): void {
+ngOnDestroy(): void { // When the client quits, unsubscribe olympics
   this.destroy$.next();
   this.destroy$.complete();
 }
@@ -42,7 +42,7 @@ ngOnDestroy(): void {
     return this.convertedOlympics$;
   }
 
-  onSelect(event: any): void {
+  onSelect(event: any): void { // When you click on the charts, it redirects you to the details page
     const country = event.name;
     this.router.navigate(['/details'], {queryParams:{country: country}});
   }

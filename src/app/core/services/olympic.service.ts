@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Olympic } from '../models/Olympic';
-import { ErrorService } from './error.service';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -14,7 +13,7 @@ export class OlympicService {
   private errorOlympic = {id: -1, country: 'Error', participations: []};
   private olympics$ = new BehaviorSubject<Olympic[]>([this.errorOlympic]);
 
-  constructor(private http: HttpClient, private errorService:ErrorService, private router:Router) {}
+  constructor(private http: HttpClient, private router:Router) {}
 
   loadInitialData() {
     return this.http.get<Olympic[]>(this.olympicUrl).pipe(
