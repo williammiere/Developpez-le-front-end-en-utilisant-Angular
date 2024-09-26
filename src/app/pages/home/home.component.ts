@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable, of, map, takeUntil, Subject } from 'rxjs';
 import { NGXData } from 'src/app/core/models/NGXData';
 import { Olympic } from 'src/app/core/models/Olympic';
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   encapsulation:ViewEncapsulation.None
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   private olympics$: Observable<Olympic[]> = of([this.olympicService.getErrorOlympic()]);
   private convertedOlympics$: Observable<NGXData[]> = this.convertData();
   private joNumber: number = 0;

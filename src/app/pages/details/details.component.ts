@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable, of, map, takeUntil, Subject } from 'rxjs';
 import { NGXData } from 'src/app/core/models/NGXData';
 import { NGXLineData } from 'src/app/core/models/NGXLineData';
@@ -13,7 +13,7 @@ import { Participation } from 'src/app/core/models/Participation';
   styleUrl: './details.component.scss',
   encapsulation:ViewEncapsulation.None
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy {
 
   private country$ : Observable<Olympic[]> = of([this.olympicService.getErrorOlympic()]);
   private convertedCountry$ : Observable<NGXLineData[]> = this.convertData();
